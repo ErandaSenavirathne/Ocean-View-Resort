@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>User Dashboard</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background: #f4f6f8;
+	text-align: center;
+}
+
+.menu {
+	width: 300px;
+	margin: 60px auto;
+}
+
+button {
+	width: 100%;
+	padding: 12px;
+	margin: 8px 0;
+	font-size: 16px;
+	cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+	<h2>User Dashboard</h2>
+
+	<div class="menu">
+		<button onclick="location.href='../client/add-client.html'">Register
+			Client</button>
+		<button
+			onclick="location.href='../reservation/check-availability.html'">Check
+			Room Availability</button>
+		<button
+			onclick="location.href='../reservation/view-reservations.html'">View
+			Reservations</button>
+		<button onclick="location.href='../logout'">Logout</button>
+	</div>
+
+</body>
+</html>
