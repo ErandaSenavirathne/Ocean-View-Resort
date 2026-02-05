@@ -13,34 +13,117 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>User Dashboard - Ocean View</title>
+    <title>Dashboard - Ocean View Resort</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f6f8; text-align: center; margin: 0; padding: 0; }
-        .dashboard-container { padding: 40px; }
-        .menu { width: 320px; margin: 20px auto; }
-        .welcome-msg { color: #2980b9; margin-top: 20px; }
-        
-        /* Success/Error Message Styling */
+        :root {
+            --ocean-blue: #2980b9;
+            --soft-gray: #f4f7f6;
+            --dark-blue: #2c3e50;
+            --success-green: #27ae60;
+            --danger-red: #c0392b;
+            --warning-gold: #f39c12;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--soft-gray); 
+            margin: 0; 
+            color: var(--dark-blue);
+        }
+
+        /* Header Area */
+        .header {
+            background: var(--dark-blue);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .dashboard-container { 
+            max-width: 900px; 
+            margin: 40px auto; 
+            padding: 20px;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-msg { color: var(--ocean-blue); font-size: 1.8em; margin: 0; }
+        .role-badge { 
+            background: #eafaf1; 
+            color: var(--success-green); 
+            padding: 5px 15px; 
+            border-radius: 20px; 
+            font-size: 0.85em; 
+            font-weight: bold; 
+            border: 1px solid var(--success-green);
+        }
+
+        /* Menu Grid */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .menu-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--ocean-blue);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .menu-card i {
+            font-size: 2.5em;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .menu-card h3 { margin: 10px 0; font-size: 1.2em; }
+        .menu-card p { color: #7f8c8d; font-size: 0.9em; }
+
+        /* Alert Styling */
         .alert {
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 15px;
-            border-radius: 5px;
-            font-weight: bold;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: 600;
             display: flex;
             justify-content: space-between;
             align-items: center;
             animation: fadeInDown 0.5s ease;
         }
-        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .close-alert { cursor: pointer; font-size: 20px; margin-left: 10px; }
+        .alert-success { background: #d4edda; color: #155724; border-left: 5px solid var(--success-green); }
+        .alert-error { background: #f8d7da; color: #721c24; border-left: 5px solid var(--danger-red); }
 
-        button { width: 100%; padding: 12px; margin: 8px 0; font-size: 16px; cursor: pointer; border: none; background: #2980b9; color: white; border-radius: 5px; transition: 0.3s; }
-        button:hover { background: #1f6391; transform: scale(1.02); }
-        .logout-btn { background: #c0392b; margin-top: 20px; }
+        .logout-btn {
+            background: var(--danger-red);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
         .logout-btn:hover { background: #a93226; }
-        
+
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -49,52 +132,74 @@
 </head>
 <body>
 
+    <div class="header">
+        <div style="font-weight: bold; font-size: 1.4em; letter-spacing: 1px;">OCEAN VIEW <span style="font-weight: 300;">RESORT</span></div>
+        <a href="../logout" class="logout-btn">Logout</a>
+    </div>
+
     <div class="dashboard-container">
-        <h2>Staff Reservation Portal</h2>
-        <h3 class="welcome-msg">Hello, <%= user %>!</h3>
-        <p>Role: <span style="color: #27ae60;">USER</span></p>
+        
+        <div class="welcome-section">
+            <h2 class="welcome-msg">Welcome, <%= user %>!</h2>
+            <span class="role-badge">STAFF ACCESS</span>
+        </div>
 
         <c:if test="${param.reservation == 'success'}">
             <div class="alert alert-success" id="msg">
-                <span>✔ Reservation Saved & Rooms Booked!</span>
-                <span class="close-alert" onclick="this.parentElement.style.display='none'">&times;</span>
+                <span>✔ Reservation successfully confirmed and rooms assigned.</span>
+                <span style="cursor:pointer" onclick="this.parentElement.style.display='none'">&times;</span>
             </div>
         </c:if>
         
         <c:if test="${param.reservation == 'error'}">
             <div class="alert alert-error" id="msg">
-                <span>✖ Database Error. Please try again.</span>
-                <span class="close-alert" onclick="this.parentElement.style.display='none'">&times;</span>
+                <span>✖ System Error: Could not process booking. Please check database connection.</span>
+                <span style="cursor:pointer" onclick="this.parentElement.style.display='none'">&times;</span>
             </div>
         </c:if>
 
-        <div class="menu">
-        	 <button onclick="location.href='add-guest.jsp'">
-                Register a Client
-            </button>
-        
-            <button onclick="location.href='search-guest.jsp'">Make a Reservation</button>
-            
-            <button onclick="location.href='${pageContext.request.contextPath}/ViewAvailableRooms'">
-                Check Room Availability
-            </button>
-            
-            <button style="background: #f39c12;" onclick="location.href='${pageContext.request.contextPath}/ManageOccupancy'">
-                Process Check-Out (Reset Rooms)
-            </button>
-            
-            <button onclick="location.href='../reservation/view-bookings.jsp'">View All Reservations</button>
-            
-            <button class="logout-btn" onclick="location.href='../logout'">Logout</button>
+        <div class="menu-grid">
+            <div class="menu-card" onclick="location.href='add-guest.jsp'">
+                <div style="color: var(--ocean-blue); font-size: 2.5em;">👤</div>
+                <h3>Register Guest</h3>
+                <p>Add a new client to the system database.</p>
+            </div>
+
+            <div class="menu-card" onclick="location.href='search-guest.jsp'">
+                <div style="color: var(--success-green); font-size: 2.5em;">🔑</div>
+                <h3>New Reservation</h3>
+                <p>Start the booking process for an existing guest.</p>
+            </div>
+
+            <div class="menu-card" onclick="location.href='${pageContext.request.contextPath}/ViewAvailableRooms'">
+                <div style="color: var(--ocean-blue); font-size: 2.5em;">📋</div>
+                <h3>Room Status</h3>
+                <p>Check live occupancy and available room types.</p>
+            </div>
+
+            <div class="menu-card" onclick="location.href='${pageContext.request.contextPath}/ManageOccupancy'">
+                <div style="color: var(--warning-gold); font-size: 2.5em;">🚪</div>
+                <h3>Process Check-Out</h3>
+                <p>Release rooms and finalize guest departures.</p>
+            </div>
+
+            <div class="menu-card" onclick="location.href='../reservation/view-bookings.jsp'">
+                <div style="color: var(--dark-blue); font-size: 2.5em;">📅</div>
+                <h3>View Bookings</h3>
+                <p>Access the full list of all current reservations.</p>
+            </div>
         </div>
     </div>
 
     <script>
-        // Auto-hide alerts after 5 seconds
+        // Auto-fade alerts
         setTimeout(() => {
             const msg = document.getElementById('msg');
-            if(msg) msg.style.opacity = '0';
-            setTimeout(() => { if(msg) msg.style.display = 'none'; }, 500);
+            if(msg) {
+                msg.style.transition = 'opacity 0.5s ease';
+                msg.style.opacity = '0';
+                setTimeout(() => msg.style.display = 'none', 500);
+            }
         }, 5000);
     </script>
 
