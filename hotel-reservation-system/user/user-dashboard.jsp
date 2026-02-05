@@ -177,7 +177,7 @@
                 <p>Check live occupancy and available room types.</p>
             </div>
 
-            <div class="menu-card" onclick="location.href='${pageContext.request.contextPath}/ManageOccupancy'">
+            <div class="menu-card" onclick="location.href='manage-occupancy.jsp'">
                 <div style="color: var(--warning-gold); font-size: 2.5em;">🚪</div>
                 <h3>Process Check-Out</h3>
                 <p>Release rooms and finalize guest departures.</p>
