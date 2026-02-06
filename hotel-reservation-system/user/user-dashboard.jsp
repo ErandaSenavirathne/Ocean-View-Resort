@@ -22,6 +22,7 @@
             --success-green: #27ae60;
             --danger-red: #c0392b;
             --warning-gold: #f39c12;
+            --help-purple: #8e44ad;
         }
 
         body { 
@@ -43,7 +44,7 @@
         }
 
         .dashboard-container { 
-            max-width: 900px; 
+            max-width: 1000px; 
             margin: 40px auto; 
             padding: 20px;
         }
@@ -67,8 +68,8 @@
         /* Menu Grid */
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             margin-top: 20px;
         }
 
@@ -81,6 +82,10 @@
             transition: 0.3s;
             cursor: pointer;
             border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .menu-card:hover {
@@ -89,14 +94,13 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
-        .menu-card i {
-            font-size: 2.5em;
-            display: block;
+        .menu-card .icon {
+            font-size: 2.8em;
             margin-bottom: 15px;
         }
 
-        .menu-card h3 { margin: 10px 0; font-size: 1.2em; }
-        .menu-card p { color: #7f8c8d; font-size: 0.9em; }
+        .menu-card h3 { margin: 10px 0; font-size: 1.2em; color: var(--dark-blue); }
+        .menu-card p { color: #7f8c8d; font-size: 0.9em; margin: 0; }
 
         /* Alert Styling */
         .alert {
@@ -134,7 +138,8 @@
 
     <div class="header">
         <div style="font-weight: bold; font-size: 1.4em; letter-spacing: 1px;">OCEAN VIEW <span style="font-weight: 300;">RESORT</span></div>
-        <a href="../logout" class="logout-btn">Logout</a>
+        <a href="${pageContext.request.contextPath}/LogoutServlet" class="logout-btn">Logout</a>
+        
     </div>
 
     <div class="dashboard-container">
@@ -160,33 +165,39 @@
 
         <div class="menu-grid">
             <div class="menu-card" onclick="location.href='add-guest.jsp'">
-                <div style="color: var(--ocean-blue); font-size: 2.5em;">👤</div>
+                <div class="icon" style="color: var(--ocean-blue);">👤</div>
                 <h3>Register Guest</h3>
                 <p>Add a new client to the system database.</p>
             </div>
 
             <div class="menu-card" onclick="location.href='search-guest.jsp'">
-                <div style="color: var(--success-green); font-size: 2.5em;">🔑</div>
+                <div class="icon" style="color: var(--success-green);">🔑</div>
                 <h3>New Reservation</h3>
                 <p>Start the booking process for an existing guest.</p>
             </div>
 
             <div class="menu-card" onclick="location.href='${pageContext.request.contextPath}/ViewAvailableRooms'">
-                <div style="color: var(--ocean-blue); font-size: 2.5em;">📋</div>
+                <div class="icon" style="color: var(--ocean-blue);">📋</div>
                 <h3>Room Status</h3>
                 <p>Check live occupancy and available room types.</p>
             </div>
 
             <div class="menu-card" onclick="location.href='manage-occupancy.jsp'">
-                <div style="color: var(--warning-gold); font-size: 2.5em;">🚪</div>
+                <div class="icon" style="color: var(--warning-gold);">🚪</div>
                 <h3>Process Check-Out</h3>
                 <p>Release rooms and finalize guest departures.</p>
             </div>
 
-            <div class="menu-card" onclick="location.href='../reservation/view-bookings.jsp'">
-                <div style="color: var(--dark-blue); font-size: 2.5em;">📅</div>
+            <div class="menu-card" onclick="location.href='${pageContext.request.contextPath}/ViewBookingsServlet'">
+                <div class="icon" style="color: var(--dark-blue);">📅</div>
                 <h3>View Bookings</h3>
-                <p>Access the full list of all current reservations.</p>
+                <p>Access and filter the full list of reservations.</p>
+            </div>
+
+            <div class="menu-card" onclick="location.href='help.jsp'">
+                <div class="icon" style="color: var(--help-purple);">💡</div>
+                <h3>Help & Guidelines</h3>
+                <p>Instructions and FAQs for new staff members.</p>
             </div>
         </div>
     </div>

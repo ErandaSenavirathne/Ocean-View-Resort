@@ -30,7 +30,8 @@
     <form action="${pageContext.request.contextPath}/FetchCheckOutDetails" method="get">
         <input type="text" name="nicSearch" placeholder="Ex: 199512345678" required autofocus>
         <div class="btn-group">
-            <a href="user-dashboard.jsp" class="btn btn-back">Back</a>
+        	<a href="${pageContext.request.contextPath}/user/user-dashboard.jsp" class="btn btn-back">Back</a>
+            
             <button type="submit" class="btn btn-search">Find Reservation</button>
         </div>
     </form>
