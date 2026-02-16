@@ -194,11 +194,18 @@
                 <p>Access and filter the full list of reservations.</p>
             </div>
 
+			<div class="menu-card" onclick="location.href='${pageContext.request.contextPath}/FoodOrderingServlet'">
+      			 <div class="icon" style="color: #e67e22;">🍽️</div>
+      			 <h3>Food Ordering</h3>
+       			 <p>Order meals for guests and add to their room bill.</p>
+   			 </div>
+
             <div class="menu-card" onclick="location.href='help.jsp'">
                 <div class="icon" style="color: var(--help-purple);">💡</div>
                 <h3>Help & Guidelines</h3>
                 <p>Instructions and FAQs for new staff members.</p>
             </div>
+            
         </div>
     </div>
 

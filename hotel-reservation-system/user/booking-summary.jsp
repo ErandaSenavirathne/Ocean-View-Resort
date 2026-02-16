@@ -33,6 +33,8 @@
         .value { color: var(--dark-blue); font-weight: 600; }
 
         .bill-section { background: #fff9e6; padding: 20px; border-radius: 10px; border: 1px solid var(--gold); }
+        .discount-badge { font-size: 0.75em; background: var(--gold); color: var(--dark-blue); padding: 2px 8px; border-radius: 5px; margin-left: 5px; }
+        
         .total-row { display: flex; justify-content: space-between; font-size: 1.3em; margin-top: 10px; padding-top: 10px; border-top: 2px solid var(--gold); }
         .final-price { color: var(--success-green); font-weight: 800; }
 
@@ -65,13 +67,27 @@
             <div class="summary-row"><span class="label">Guest Name</span><span class="value"><%= guestName %></span></div>
             <div class="summary-row"><span class="label">Check-in</span><span class="value">${checkIn}</span></div>
             <div class="summary-row"><span class="label">Check-out</span><span class="value">${checkOut}</span></div>
-            <div class="summary-row"><span class="label">Total Stay</span><span class="value">${nights} Night(s)</span></div>
+            <div class="summary-row">
+                <span class="label">Booking Details</span>
+                <span class="value">${nights} Night(s) / ${roomCount} Room(s)</span>
+            </div>
         </div>
     </div>
 
     <div class="bill-section">
         <div class="summary-row"><span class="label">Base Total</span><span class="value">Rs. ${baseTotal}</span></div>
-        <div class="summary-row"><span class="label">Discount</span><span class="value" style="color: var(--danger-red);">- Rs. ${discount}</span></div>
+        
+        <c:if test="${discountPercent > 0}">
+            <div class="summary-row">
+                <span class="label">
+                    Total Discount (${discountPercent}%)
+                    <c:if test="${nights >= 5}"><span class="discount-badge">Long Stay</span></c:if>
+                    <c:if test="${roomCount > 1}"><span class="discount-badge">Multi-Room</span></c:if>
+                </span>
+                <span class="value" style="color: var(--danger-red);">- Rs. ${discount}</span>
+            </div>
+        </c:if>
+        
         <div class="total-row"><span>Final Payable</span><span class="final-price">Rs. ${finalBill}</span></div>
     </div>
 
@@ -79,6 +95,7 @@
         <input type="hidden" name="checkIn" value="${checkIn}">
         <input type="hidden" name="checkOut" value="${checkOut}">
         <input type="hidden" name="finalBill" value="${finalBill}">
+        <input type="hidden" name="discount" value="${discount}">
         <input type="hidden" name="selectedRoomIds" value="${selectedRoomIds}">
 
         <div class="btn-group">
@@ -104,7 +121,7 @@
 <script>
     function handleCancel() { document.getElementById('modalOverlay').style.display = 'flex'; }
     function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
-    function confirmDiscard() { window.location.href = "${pageContext.request.contextPath}/user/user-dashboard.jsp"; }
+    function confirmDiscard() { window.location.href = "${pageContext.request.contextPath}/AdminDashboardServlet"; }
 </script>
 
 </body>

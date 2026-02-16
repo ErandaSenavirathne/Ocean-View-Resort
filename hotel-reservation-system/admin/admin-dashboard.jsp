@@ -84,6 +84,7 @@
             <li onclick="location.href='${pageContext.request.contextPath}/AdminManageUsersServlet'">Staff Management</li>
             <li onclick="location.href='${pageContext.request.contextPath}/AdminManageRoomsServlet'">Room Inventory</li>
             <li onclick="location.href='${pageContext.request.contextPath}/AdminReportsServlet'">Financial Reports</li>
+            <li onclick="location.href='${pageContext.request.contextPath}/AdminSystemSettingsServlet'">Manage Discounts</li>
             <li onclick="location.href='${pageContext.request.contextPath}/admin/settings.jsp'">General Settings</li>
         </ul>
         <div style="padding: 20px;">

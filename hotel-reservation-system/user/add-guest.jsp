@@ -137,6 +137,11 @@
             <input type="text" name="name" placeholder="Enter guest's full name" required>
         </div>
 
+		<div class="form-group">
+    		<label>Home Address</label>
+   			 <input type="text" name="address" placeholder="Enter guest's residential address">
+		</div>
+
         <div class="form-group">
             <label>NIC / Passport Number</label>
             <input type="text" name="nic" placeholder="National ID or Passport" required>
