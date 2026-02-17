@@ -6,15 +6,84 @@
     <title>Receipt - Ocean View Resort</title>
     <style>
         body { font-family: 'Courier New', monospace; background: #f0f0f0; padding: 20px; }
-        .receipt-card { background: white; width: 380px; margin: auto; padding: 25px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        .header { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 15px; }
-        .header h2 { margin: 0; font-size: 20px; }
-        .section-title { font-size: 12px; font-weight: bold; border-bottom: 1px solid #eee; margin: 10px 0 5px 0; padding-bottom: 2px; text-transform: uppercase; }
-        .row { display: flex; justify-content: space-between; font-size: 13px; margin: 5px 0; }
-        .item-row { display: flex; justify-content: space-between; font-size: 12px; margin: 3px 0; color: #333; }
-        .total-row { border-top: 2px solid #000; margin-top: 15px; padding-top: 10px; font-weight: bold; font-size: 18px; }
-        .btn { padding: 10px 20px; background: #2980b9; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; text-decoration: none; }
-        @media print { .no-print { display: none; } body { background: white; padding: 0; } .receipt-card { border: none; box-shadow: none; width: 100%; } }
+
+.receipt-card {
+    background: white;
+    width: 420px;              /* increased width */
+    max-width: 100%;           /* prevents overflow on small screens */
+    margin: auto;
+    padding: 25px;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-sizing: border-box;    /* keeps padding inside width */
+}
+
+.header { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 15px; }
+.header h2 { margin: 0; font-size: 20px; }
+
+.section-title {
+    font-size: 12px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    margin: 10px 0 5px 0;
+    padding-bottom: 2px;
+    text-transform: uppercase;
+}
+
+/* 🔥 CRITICAL FIX FOR ROW OVERFLOW */
+.row, .item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    margin: 5px 0;
+    word-break: break-word;
+}
+
+.row span:first-child,
+.item-row span:first-child {
+    flex: 1;
+    min-width: 0;
+}
+
+.row span:last-child,
+.item-row span:last-child {
+    white-space: nowrap;
+}
+
+.item-row { font-size: 12px; color: #333; }
+
+.total-row {
+    border-top: 2px solid #000;
+    margin-top: 15px;
+    padding-top: 10px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.btn {
+    padding: 10px 20px;
+    background: #2980b9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Print optimization */
+@media print {
+    .no-print { display: none; }
+    body { background: white; padding: 0; }
+    .receipt-card {
+        border: none;
+        box-shadow: none;
+        width: 100%;
+    }
+}
+
     </style>
 </head>
 <body>

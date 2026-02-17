@@ -28,10 +28,13 @@
 
         .cart-panel { flex: 1; background: white; padding: 25px; display: flex; flex-direction: column; }
         .cart-items { flex-grow: 1; overflow-y: auto; }
-        .cart-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f9f9f9; }
+        .cart-row { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f9f9f9; gap: 10px; }
+        .cart-info { flex-grow: 1; display: flex; justify-content: space-between; align-items: center; }
+        .btn-remove-item { color: var(--danger); background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 5px; border-radius: 4px; transition: 0.2s; }
+        .btn-remove-item:hover { background: #fee2e2; }
+
         .total-section { padding: 20px 0; font-size: 1.5em; font-weight: bold; color: var(--dark); border-top: 2px solid #eee; }
         .btn-confirm { background: var(--success); color: white; padding: 18px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; width: 100%; }
-
         .btn-clear-cart { background: #fdfdfd; color: var(--danger); border: 1px solid var(--danger); padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; transition: 0.2s; }
         .btn-clear-cart:hover { background: var(--danger); color: white; }
 
@@ -50,8 +53,6 @@
         @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .modal-icon { font-size: 50px; margin-bottom: 15px; }
         .btn-dash { display: inline-block; margin-top: 20px; padding: 12px 25px; background: var(--dark); color: white; text-decoration: none; border-radius: 6px; font-weight: bold; }
-        
-        /* Modal Button Grid */
         .modal-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
         .btn-modal-primary { background: var(--dark); color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
         .btn-modal-danger { background: var(--danger); color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
@@ -65,13 +66,12 @@
         <div id="vIcon" class="modal-icon">⚠️</div>
         <h3 id="vTitle" style="margin:0; color: var(--dark);">Attention</h3>
         <p id="vMsg" style="color: #666; margin-top:10px;"></p>
-        <div class="modal-buttons" id="modalActions">
-            </div>
+        <div class="modal-buttons" id="modalActions"></div>
     </div>
 </div>
 
 <c:if test="${not empty param.status}">
-    <div class="modal-overlay">
+    <div class="modal-overlay" style="display: flex;">
         <div class="modal-box">
             <c:choose>
                 <c:when test="${param.status == 'success'}">
@@ -102,18 +102,17 @@
             <button type="button" class="btn-search" onclick="searchGuest()">Search</button>
         </div>
         <div id="searchResults">
-            <small style="color:#666;">Search Results (Click to select):</small>
             <div id="resultsList" style="margin-top:10px;"></div>
         </div>
     </div>
 
     <div id="selectionStatus" class="selection-status">
         <div>
-            <span style="color:var(--success); font-weight:bold;">Selected Guest:</span>
+            <span style="color:var(--success); font-weight:bold;">Guest:</span>
             <span id="displayGuestName" style="margin-left:10px; font-weight:600;">-</span>
             <span id="displayRoom" style="margin-left:10px; color:#666;">(Room: -)</span>
         </div>
-        <button onclick="resetSelection()" style="background:none; border:1px solid #ccc; border-radius:4px; cursor:pointer; font-size:0.8rem;">Change</button>
+        <button onclick="resetSelection()" style="background:none; border:1px solid #ccc; border-radius:4px; cursor:pointer;">Change</button>
     </div>
 
     <div class="category-tabs">
@@ -146,8 +145,8 @@
         <div id="hiddenItems"></div>
         <input type="hidden" name="resId" id="selectedResId">
         <button type="submit" class="btn-confirm">Add to Room Bill ✓</button>
+        <a href="${pageContext.request.contextPath}/user/user-dashboard.jsp" style="text-align:center; margin-top:15px; color:#666; text-decoration:none; font-size:0.9rem; display: block;">Back to Dashboard</a>
     </form>
-    <a href="${pageContext.request.contextPath}/user/user-dashboard.jsp" style="text-align:center; margin-top:15px; color:#666; text-decoration:none; font-size:0.9rem; display: block;">Back to Dashboard</a>
 </div>
 
 <script>
@@ -159,7 +158,6 @@
 
     let cart = [];
 
-    // MODAL CONTROL
     function showModal(title, message, icon, buttonsHTML) {
         document.getElementById('vTitle').innerText = title;
         document.getElementById('vMsg').innerText = message;
@@ -168,49 +166,35 @@
         document.getElementById('validationModal').style.display = 'flex';
     }
 
-    function closeModal() {
-        document.getElementById('validationModal').style.display = 'none';
-    }
+    function closeModal() { document.getElementById('validationModal').style.display = 'none'; }
 
-    // UPDATED CLEAR CART WITH GRAPHIC
     function confirmClearCart() {
         if(cart.length === 0) return;
-        
-        showModal(
-            "Clear Items?", 
-            "This will remove all food items currently in your tray.", 
-            "🗑️", 
+        showModal("Clear Selection?", "Remove all items from the current order?", "🗑️", 
             `<button class="btn-modal-danger" onclick="executeClear()">Yes, Clear All</button>
-             <button class="btn-modal-secondary" onclick="closeModal()">Cancel</button>`
-        );
+             <button class="btn-modal-secondary" onclick="closeModal()">Cancel</button>`);
     }
 
-    function executeClear() {
-        cart = [];
+    function executeClear() { cart = []; renderCart(); closeModal(); }
+
+    function removeFromCart(id) {
+        cart = cart.filter(item => item.id !== id);
         renderCart();
-        closeModal();
     }
 
     function searchGuest() {
         const query = document.getElementById('guestInput').value.toLowerCase();
-        if(!query) {
-            showModal("Input Required", "Please enter a guest name or room number.", "⚠️", `<button class="btn-modal-primary" onclick="closeModal()">OK</button>`);
-            return;
-        }
-
+        if(!query) { showModal("Input Required", "Enter a name or room number.", "⚠️", `<button class="btn-modal-primary" onclick="closeModal()">OK</button>`); return; }
         const filtered = allGuests.filter(g => g.name.toLowerCase().includes(query) || g.rooms.includes(query));
         const resultsList = document.getElementById('resultsList');
         resultsList.innerHTML = '';
-        
         if(filtered.length > 0) {
             filtered.forEach(g => {
                 resultsList.innerHTML += `<div class="result-item" onclick="selectGuest('\${g.id}', '\${g.name}', '\${g.rooms}')">
                     <span><strong>\${g.name}</strong></span><span style="color:#e67e22;">Room: \${g.rooms}</span></div>`;
             });
             document.getElementById('searchResults').style.display = 'block';
-        } else {
-            showModal("No Results", "No active guests found.", "🔍", `<button class="btn-modal-primary" onclick="closeModal()">OK</button>`);
-        }
+        } else { showModal("No Results", "No matching guests found.", "🔍", `<button class="btn-modal-primary" onclick="closeModal()">OK</button>`); }
     }
 
     function selectGuest(id, name, room) {
@@ -230,8 +214,7 @@
 
     function addToCart(id, name, price) {
         let existing = cart.find(i => i.id === id);
-        if(existing) { existing.qty++; } 
-        else { cart.push({id, name, price, qty: 1}); }
+        if(existing) { existing.qty++; } else { cart.push({id, name, price, qty: 1}); }
         renderCart();
     }
 
@@ -243,7 +226,14 @@
         if(cart.length === 0) { list.innerHTML = '<p style="color:#999; text-align:center; margin-top:50px;">No items added yet.</p>'; }
         cart.forEach(item => {
             total += (item.price * item.qty);
-            list.innerHTML += `<div class="cart-row"><span>\${item.name} <strong>x\${item.qty}</strong></span><span>Rs. \${(item.price * item.qty).toFixed(2)}</span></div>`;
+            list.innerHTML += `
+                <div class="cart-row">
+                    <button type="button" class="btn-remove-item" onclick="removeFromCart('\${item.id}')" title="Remove Item">🗑️</button>
+                    <div class="cart-info">
+                        <span>\${item.name} <strong>x\${item.qty}</strong></span>
+                        <span>Rs. \${(item.price * item.qty).toFixed(2)}</span>
+                    </div>
+                </div>`;
             hidden.innerHTML += `<input type="hidden" name="itemId" value="\${item.id}"><input type="hidden" name="quantity" value="\${item.qty}">`;
         });
         document.getElementById('grandTotal').innerText = total.toFixed(2);
@@ -259,11 +249,11 @@
 
     function validateOrder() {
         if(!document.getElementById('selectedResId').value) {
-            showModal("Guest Required", "Please select a guest first.", "👤", `<button class="btn-modal-primary" onclick="closeModal()">OK</button>`);
+            showModal("Guest Required", "Select a guest before confirming.", "👤", `<button class="btn-modal-primary" onclick="closeModal()">OK</button>`);
             return false;
         }
         if(cart.length === 0) {
-            showModal("Cart Empty", "Please add food items before confirming.", "🛒", `<button class="btn-modal-primary" onclick="closeModal()">OK</button>`);
+            showModal("Cart Empty", "Add items before confirming.", "🛒", `<button class="btn-modal-primary" onclick="closeModal()">OK</button>`);
             return false;
         }
         return true;

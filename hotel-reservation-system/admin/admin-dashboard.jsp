@@ -85,6 +85,7 @@
             <li onclick="location.href='${pageContext.request.contextPath}/AdminManageRoomsServlet'">Room Inventory</li>
             <li onclick="location.href='${pageContext.request.contextPath}/AdminReportsServlet'">Financial Reports</li>
             <li onclick="location.href='${pageContext.request.contextPath}/AdminSystemSettingsServlet'">Manage Discounts</li>
+            <li onclick="location.href='${pageContext.request.contextPath}/AdminManageFoodServlet'">Restaurant Menu</li>
             <li onclick="location.href='${pageContext.request.contextPath}/admin/settings.jsp'">General Settings</li>
         </ul>
         <div style="padding: 20px;">
@@ -131,16 +132,22 @@
             </div>
 
             <div class="action-card" onclick="location.href='${pageContext.request.contextPath}/AdminManageRoomsServlet'">
-    <span style="font-size: 2em;">🏨</span>
-    <h3>Room Inventory</h3>
-    <p>Update room rates, add new suites, or mark rooms for maintenance.</p>
-</div>
+   				 <span style="font-size: 2em;">🏨</span>
+   				 <h3>Room Inventory</h3>
+   				 <p>Update room rates, add new suites, or mark rooms for maintenance.</p>
+			</div>
 
             <div class="action-card" onclick="location.href='${pageContext.request.contextPath}/AdminReportsServlet'">
                 <span style="font-size: 2em;">📊</span>
                 <h3>Business Insights</h3>
                 <p>View daily, weekly, and monthly revenue analytics and guest trends.</p>
             </div>
+            
+            <div class="action-card" onclick="location.href='${pageContext.request.contextPath}/AdminManageFoodServlet'">
+   				 <span style="font-size: 2em;">🍳</span>
+   				 <h3>Restaurant Menu</h3>
+  				 <p>Manage food items, update pricing, and toggle daily menu availability.</p>
+			</div>
         </div>
     </div>
 
