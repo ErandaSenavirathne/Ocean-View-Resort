@@ -6,7 +6,25 @@
     <title>Food POS | Ocean View</title>
     <style>
         :root { --orange: #e67e22; --dark: #2c3e50; --gray: #f4f7f6; --success: #27ae60; --danger: #c0392b; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--gray); display: flex; height: 100vh; margin: 0; }
+        
+        
+        body { 
+   				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+   				margin: 0; 
+   				display: flex; 
+   				height: 100vh;
+   				color: var(--dark-blue);
+
+    		/* 🔥 Background Image */
+  				background: 
+      				 linear-gradient(rgba(255,255,255,0.25), rgba(255,255,255,0.35)),
+      				 url('${pageContext.request.contextPath}/images/resort-bg.jpg');
+
+				background-size: cover;
+   				background-position: center;
+   				background-attachment: fixed;
+   					 
+				}
         
         .selection-panel { flex: 2; padding: 25px; overflow-y: auto; border-right: 2px solid #ddd; }
         .search-container { background: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }

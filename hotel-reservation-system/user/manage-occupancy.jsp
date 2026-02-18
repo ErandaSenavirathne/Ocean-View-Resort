@@ -5,7 +5,23 @@
     <title>Check-Out Search - Ocean View</title>
     <style>
         :root { --ocean-blue: #2980b9; --soft-gray: #f4f7f6; --dark-blue: #2c3e50; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--soft-gray); display: flex; justify-content: center; padding-top: 80px; margin: 0; }
+        
+        body { 
+   				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+   			
+   				color: var(--dark-blue);
+   				display: flex; justify-content: center; padding-top: 80px; margin: 0;
+
+    		/* 🔥 Background Image */
+  				background: 
+      				 linear-gradient(rgba(255,255,255,0.25), rgba(255,255,255,0.35)),
+      				 url('${pageContext.request.contextPath}/images/resort-bg.jpg');
+
+				background-size: cover;
+   				background-position: center;
+   				background-attachment: fixed;
+   					 
+				}
         .search-box { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); width: 420px; text-align: center; }
         h2 { color: var(--dark-blue); margin-bottom: 5px; }
         .subtitle { color: #7f8c8d; margin-bottom: 25px; font-size: 0.9em; }

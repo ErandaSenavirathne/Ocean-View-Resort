@@ -12,14 +12,26 @@
             --danger-red: #c0392b;
         }
 
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: var(--soft-gray); 
-            display: flex; 
+       
+
+		body { 
+   				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+   				margin: 0; 
+   				color: var(--dark-blue);
+   				 display: flex; 
             justify-content: center; 
             padding-top: 60px; 
-            margin: 0;
-        }
+
+    		/* 🔥 Background Image */
+  				background: 
+      				 linear-gradient(rgba(255,255,255,0.25), rgba(255,255,255,0.35)),
+      				 url('${pageContext.request.contextPath}/images/resort-bg.jpg');
+
+				background-size: cover;
+   				background-position: center;
+   				background-attachment: fixed;
+   					 
+				}
 
         .search-box { 
             background: white; 

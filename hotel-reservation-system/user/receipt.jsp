@@ -5,7 +5,24 @@
 <head>
     <title>Receipt - Ocean View Resort</title>
     <style>
-        body { font-family: 'Courier New', monospace; background: #f0f0f0; padding: 20px; }
+        
+		body { 
+   				font-family: 'Courier New', Tahoma, Geneva, Verdana, sans-serif; 
+   				
+   				padding: 20px; 
+   				color: var(--dark-blue);
+
+    		/* 🔥 Background Image */
+  				background: 
+      				 linear-gradient(rgba(255,255,255,0.25), rgba(255,255,255,0.35)),
+      				 url('${pageContext.request.contextPath}/images/resort-bg.jpg');
+
+				background-size: cover;
+   				background-position: center;
+   				background-attachment: fixed;
+   					 
+				}
+
 
 .receipt-card {
     background: white;

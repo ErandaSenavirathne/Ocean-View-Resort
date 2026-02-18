@@ -24,7 +24,22 @@
             --success-green: #27ae60;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--soft-gray); margin: 0; padding: 20px; }
+       body { 
+   				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+   				margin: 0; 
+   				padding: 20px;
+   				color: var(--dark-blue);
+
+    		/* 🔥 Background Image */
+  				background: 
+      				 linear-gradient(rgba(255,255,255,0.25), rgba(255,255,255,0.35)),
+      				 url('${pageContext.request.contextPath}/images/resort-bg.jpg');
+
+				background-size: cover;
+   				background-position: center;
+   				background-attachment: fixed;
+   					 
+				}
         .container { max-width: 850px; margin: 20px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
         
         /* Progress Bar */

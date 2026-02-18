@@ -6,7 +6,24 @@
     <title>Finalize Check-Out - Ocean View</title>
     <style>
         :root { --ocean-blue: #2980b9; --dark-blue: #2c3e50; --success-green: #27ae60; --danger-red: #c0392b; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 30px; }
+    
+        body { 
+   				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+   				margin: 0;
+   				padding: 30px; 
+   				background: #f4f7f6; 
+   				color: var(--dark-blue);
+
+    		/* 🔥 Background Image */
+  				background: 
+      				 linear-gradient(rgba(255,255,255,0.25), rgba(255,255,255,0.35)),
+      				 url('${pageContext.request.contextPath}/images/resort-bg.jpg');
+
+				background-size: cover;
+   				background-position: center;
+   				background-attachment: fixed;
+   					 
+				}
         .container { max-width: 800px; margin: auto; background: white; padding: 35px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         .header { border-bottom: 2px solid var(--ocean-blue); padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
         .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }

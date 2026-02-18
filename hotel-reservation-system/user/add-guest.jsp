@@ -12,13 +12,23 @@
             --success-green: #27ae60;
         }
 
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: var(--soft-gray); 
-            margin: 0; 
-            padding: 20px; 
-        }
+      
+		body { 
+   				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+   				margin: 0; 
+   				color: var(--dark-blue);
 
+    		/* 🔥 Background Image */
+  				background: 
+      				 linear-gradient(rgba(255,255,255,0.25), rgba(255,255,255,0.35)),
+      				 url('${pageContext.request.contextPath}/images/resort-bg.jpg');
+
+				background-size: cover;
+   				background-position: center;
+   				background-attachment: fixed;
+   					 
+				}
+		
         .container {
             max-width: 450px;
             margin: 40px auto;

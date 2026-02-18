@@ -5,7 +5,23 @@
     <title>Staff Help Center - Ocean View</title>
     <style>
         :root { --ocean: #2980b9; --dark: #2c3e50; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 30px; }
+
+        body { 
+   				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+   				margin: 0;
+   				padding: 30px; 
+   				color: var(--dark-blue);
+
+    		/* 🔥 Background Image */
+  				background: 
+      				 linear-gradient(rgba(255,255,255,0.25), rgba(255,255,255,0.35)),
+      				 url('${pageContext.request.contextPath}/images/resort-bg.jpg');
+
+				background-size: cover;
+   				background-position: center;
+   				background-attachment: fixed;
+   					 
+				}
         .help-container { max-width: 900px; margin: auto; }
         .help-card { background: white; padding: 25px; border-radius: 12px; margin-bottom: 20px; border-left: 5px solid var(--ocean); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .help-card h3 { margin-top: 0; color: var(--dark); display: flex; align-items: center; gap: 10px; }
