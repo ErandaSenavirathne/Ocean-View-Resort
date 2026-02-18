@@ -1,141 +1,213 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login - Ocean View Resort</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Login | Ocean View Resort Galle</title>
     <style>
         :root {
-            --ocean-blue: #2980b9;
-            --dark-blue: #2c3e50;
-            --soft-gray: #f4f7f6;
-            --danger-red: #c0392b;
-            --glass-white: rgba(255, 255, 255, 0.95);
+            --primary-teal: #008080; 
+            --accent-gold: #c5a059;  
+            --dark-navy: #1a2a3a;
+            --soft-sand: #fdfaf5;
+            --glass: rgba(255, 255, 255, 0.95);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        url('images/resort-bg.jpg');
+            background-size: cover;
+            background-attachment: fixed;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .login-card {
-            background: var(--glass-white);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            width: 380px;
-            text-align: center;
-            animation: slideUp 0.6s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .logo-area { margin-bottom: 30px; }
-        .logo-area h1 { color: var(--dark-blue); margin: 0; font-size: 24px; letter-spacing: 2px; }
-        .logo-area p { color: var(--ocean-blue); font-weight: 600; margin-top: 5px; font-size: 0.9em; text-transform: uppercase; }
-
-        /* Error Message Styling */
-        .error-box {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 0.85em;
-            border: 1px solid #f5c6cb;
+        .login-container {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            background: var(--glass);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
+            width: 850px;
+            min-height: 520px;
+            backdrop-filter: blur(10px);
         }
 
-        .form-group { text-align: left; margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; color: #555; font-weight: 600; font-size: 0.9em; }
+        /* Branding Side Panel */
+        .brand-side {
+            background: var(--dark-navy);
+            color: white;
+            width: 40%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center; /* Centers the logo and text */
+            text-align: center;
+            position: relative;
+        }
+
+        /* LOGO STYLING */
+        .resort-logo {
+            width: 120px;         /* Adjust size as needed */
+            height: 120px;
+            object-fit: contain;  /* Keeps logo proportions */
+            margin-bottom: 20px;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+        }
+
+        .brand-side h2 {
+            letter-spacing: 4px;
+            margin: 10px 0;
+            font-weight: 300;
+        }
+
+        /* Form Side */
+        .form-side {
+            width: 60%;
+            padding: 50px;
+            background: var(--soft-sand);
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--dark-navy);
+            margin: 0;
+        }
+
+        .subtitle {
+            color: var(--primary-teal);
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 35px;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
 
         input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            padding: 14px;
+            border: 1px solid #ccd1d1;
+            border-radius: 6px;
+            background: white;
+            font-size: 1rem;
             box-sizing: border-box;
-            font-size: 16px;
             transition: 0.3s;
         }
 
         input:focus {
-            border-color: var(--ocean-blue);
             outline: none;
-            box-shadow: 0 0 8px rgba(41, 128, 185, 0.2);
+            border-color: var(--primary-teal);
+            box-shadow: 0 0 8px rgba(0, 128, 128, 0.15);
         }
 
-        button {
+        .btn-login {
             width: 100%;
-            padding: 14px;
-            background: var(--ocean-blue);
+            padding: 16px;
+            background: var(--dark-navy);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 6px;
+            font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
             margin-top: 10px;
         }
 
-        button:hover {
-            background: #1f6391;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        .btn-login:hover {
+            background: var(--primary-teal);
+            transform: translateY(-1px);
         }
 
-        .footer-text { margin-top: 25px; font-size: 0.8em; color: #999; }
+        .error-msg {
+            background: #ffebeb;
+            color: #b33939;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #b33939;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 0.75rem;
+            color: #888;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 15px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .login-container { width: 90%; flex-direction: column; }
+            .brand-side { width: 100%; padding: 30px; }
+            .form-side { width: 100%; padding: 30px; }
+            .resort-logo { width: 80px; height: 80px; }
+        }
     </style>
 </head>
 <body>
 
-<div class="login-card">
-    <div class="logo-area">
-        <div style="font-size: 45px; margin-bottom: 10px;">🌊</div>
-        <h1>OCEAN VIEW</h1>
-        <p>Staff Management Portal</p>
+<div class="login-container">
+    <div class="brand-side">
+        <img src="${pageContext.request.contextPath}/images/logo.png" alt="Ocean View Resort Logo" class="resort-logo">
+        
+        <h2>GALLE</h2>
+        <p style="font-style: italic; opacity: 0.7; font-size: 0.9rem;">
+            Excellence in Hospitality
+        </p>
     </div>
 
-    <%-- Error message display logic --%>
-    <%
-        String error = (String) request.getAttribute("error");
-        if (error != null) {
-    %>
-        <div class="error-box">
-            <span>⚠️</span> <%= error %>
-        </div>
-    <%
-        }
-    %>
-
-    <form action="login" method="post">
-        <div class="form-group">
-            <label>Username</label>
-            <input type="text" name="username" placeholder="Enter your username" required autofocus>
+    <div class="form-side">
+        <div class="header-area">
+            <h1>Ocean View Resort</h1>
+            <div class="subtitle">Staff Management Portal</div>
         </div>
 
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Enter your password" required>
+        <%-- Error Message JSP Logic --%>
+        <% String error = (String) request.getAttribute("error"); if (error != null) { %>
+            <div class="error-msg">
+                <strong>Error:</strong> <%= error %>
+            </div>
+        <% } %>
+
+        <form action="login" method="post">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Employee ID" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="********" required>
+            </div>
+
+            <button type="submit" class="btn-login">SECURE LOGIN</button>
+        </form>
+
+        <div class="footer">
+            &copy; 2026 Ocean View Resort & Spa | Galle Branch<br>
+            <em>Authorized Access Only. All activities are monitored.</em>
         </div>
-
-        <button type="submit">Secure Login</button>
-    </form>
-
-    <div class="footer-text">
-        &copy; 2026 Ocean View Resort & Spa <br>
-        Authorized Personnel Only
     </div>
 </div>
 

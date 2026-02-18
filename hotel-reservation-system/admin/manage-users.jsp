@@ -13,6 +13,27 @@
         .btn { padding: 8px 15px; border-radius: 4px; border: none; cursor: pointer; text-decoration: none; }
         .btn-add { background: #27ae60; color: white; }
         .btn-del { background: #e74c3c; color: white; font-size: 0.8em; }
+        .btn-back {
+            text-decoration: none;
+            background: white;
+            color: #334155;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            display: inline-flex; /* Changed from flex to inline-flex to stop full width */
+            align-items: center;
+            gap: 8px;
+            float: right; /* Moves it to the right corner */
+        }
+
+        .btn-back:hover {
+            background: #f1f5f9;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        
         .badge { padding: 4px 8px; border-radius: 12px; font-size: 0.8em; font-weight: bold; }
         .role-ADMIN { background: #d4edda; color: #155724; }
         .role-USER { background: #e1effe; color: #1e429f; }
@@ -21,7 +42,10 @@
 <body>
 
 <div class="container">
-    <a href="${pageContext.request.contextPath}/AdminDashboardServlet" style="text-decoration: none;">← Back to Dashboard</a>
+   
+    <a href="${pageContext.request.contextPath}/AdminDashboardServlet" class="btn-back">
+            <span>←</span> Back to Dashboard
+        </a>
     <h2>Staff & Admin Management</h2>
 
     <div class="form-box">

@@ -41,7 +41,26 @@
         .btn-add { background: var(--ocean-primary); color: white; }
         .btn-edit { background: #e1effe; color: #1e429f; margin-right: 5px; }
         .btn-delete { background: #fde8e8; color: #c81e1e; text-decoration: none; }
+		.btn-back {
+            text-decoration: none;
+            background: white;
+            color: #334155;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            display: inline-flex; /* Changed from flex to inline-flex to stop full width */
+            align-items: center;
+            gap: 8px;
+            float: right; /* Moves it to the right corner */
+        }
 
+        .btn-back:hover {
+            background: #f1f5f9;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
         /* Modal styling kept from previous version */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .modal-content { background: white; padding: 30px; border-radius: 15px; width: 400px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
@@ -54,12 +73,10 @@
 
     <div class="container">
         <div class="top-nav">
-            <a href="AdminDashboardServlet" class="btn-back">
-                ← Back to Admin Dashboard
-            </a>
-            <div style="color: #6b7280; font-size: 0.9rem;">
-                Logged in as <strong>Admin</strong>
-            </div>
+            <a href="${pageContext.request.contextPath}/AdminDashboardServlet" class="btn-back">
+            <span>←</span> Back to Dashboard
+        </a>
+            
         </div>
 
         <c:if test="${param.error == 'fk_constraint'}">

@@ -15,7 +15,26 @@
         .input-group { display: flex; gap: 10px; flex-wrap: wrap; }
         input, select { padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; flex: 1; }
         .btn-submit { background: var(--primary); color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+		.btn-back {
+            text-decoration: none;
+            background: white;
+            color: #334155;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            display: inline-flex; /* Changed from flex to inline-flex to stop full width */
+            align-items: center;
+            gap: 8px;
+            float: right; /* Moves it to the right corner */
+        }
 
+        .btn-back:hover {
+            background: #f1f5f9;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th { text-align: left; padding: 15px; background: #f8fafc; color: #64748b; font-size: 0.8rem; text-transform: uppercase; }
         td { padding: 15px; border-bottom: 1px solid #f1f5f9; }
@@ -31,8 +50,9 @@
 <body>
 
 <div class="container">
-    <a href="${pageContext.request.contextPath}/AdminDashboardServlet" class="back-btn">← Back to Dashboard</a>
-    
+    <a href="${pageContext.request.contextPath}/AdminDashboardServlet" class="btn-back">
+            <span>←</span> Back to Dashboard
+        </a>
     <div class="add-form">
         <h3>Add New Room</h3>
         <form action="${pageContext.request.contextPath}/AdminManageRoomsServlet" method="post" class="input-group">

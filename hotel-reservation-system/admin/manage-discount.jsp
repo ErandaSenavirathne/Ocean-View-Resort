@@ -20,6 +20,26 @@
         .hint { font-size: 0.8rem; color: #9ca3af; margin-top: 6px; }
         .btn-update { background: var(--primary); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 1rem; transition: background 0.2s; }
         .btn-update:hover { background: #1c64f2; }
+        .btn-back {
+            text-decoration: none;
+            background: white;
+            color: #334155;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            display: inline-flex; /* Changed from flex to inline-flex to stop full width */
+            align-items: center;
+            gap: 8px;
+            float: right; /* Moves it to the right corner */
+        }
+
+        .btn-back:hover {
+            background: #f1f5f9;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
         .status-msg { padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-size: 0.9rem; font-weight: 500; }
         .msg-success { background: #def7ec; color: var(--success); border: 1px solid #bcf0da; }
     </style>
@@ -27,7 +47,9 @@
 <body>
 
 <div class="container">
-    <a href="${pageContext.request.contextPath}/AdminDashboardServlet" class="back-link">← Back to Dashboard</a>
+    <a href="${pageContext.request.contextPath}/AdminDashboardServlet" class="btn-back">
+            <span>←</span> Back to Dashboard
+        </a>
     
     <div class="header-section">
         <h2>Manage Discounts</h2>
