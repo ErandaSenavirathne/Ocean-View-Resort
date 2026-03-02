@@ -1,0 +1,877 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Room Availability Tutorial — Ocean View Resort</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ocean: #2980b9;
+    --ocean-dark: #1a6fa3;
+    --ocean-pale: #ebf5fb;
+    --dark: #2c3e50;
+    --success: #27ae60;
+    --warning: #e67e22;
+    --danger: #c0392b;
+    --gold: #f1c40f;
+    --gray: #7f8c8d;
+    --border: #e8eef2;
+    --bg: #f4f7f6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ═══ BACK BAR ═══ */
+  .back-bar {
+    padding: 12px 28px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .back-bar-brand {
+    font-size: 0.8em;
+    font-weight: 700;
+    color: var(--gray);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .btn-back {
+    text-decoration: none;
+    background: white;
+    color: #334155;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-back:hover {
+    background: #f1f5f9;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  }
+
+  /* ═══ HERO ═══ */
+  .hero {
+    background: linear-gradient(135deg, #1a2a3a 0%, var(--dark) 50%, var(--ocean-dark) 100%);
+    padding: 52px 40px 44px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #a8d8ea;
+    padding: 5px 18px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    color: white;
+    font-size: 2.6em;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .hero h1 span { color: #5dade2; }
+  .hero p {
+    color: rgba(255,255,255,0.6);
+    font-size: 1em;
+    font-weight: 300;
+    max-width: 480px;
+    margin: 0 auto 32px;
+  }
+
+  /* ═══ FLOW BAR ═══ */
+  .flow-bar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  .flow-step {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: white;
+    padding: 9px 18px;
+    font-size: 0.8em;
+    font-weight: 600;
+    position: relative;
+  }
+  .flow-step:first-child { border-radius: 8px 0 0 8px; }
+  .flow-step:last-child  { border-radius: 0 8px 8px 0; }
+  .flow-step:not(:last-child)::after {
+    content: '→';
+    position: absolute; right: -10px; top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255,255,255,0.35); font-size: 0.85em; z-index: 1;
+  }
+  .flow-step.active { background: var(--ocean); border-color: var(--ocean); }
+  .flow-step .num {
+    display: inline-block; width: 19px; height: 19px;
+    background: rgba(255,255,255,0.2); border-radius: 50%;
+    font-size: 0.72em; line-height: 19px; text-align: center; margin-right: 6px;
+  }
+
+  /* ═══ MAIN ═══ */
+  .main { max-width: 1060px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  /* ═══ SECTION LABEL ═══ */
+  .section-label {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+  }
+  .section-num {
+    width: 42px; height: 42px; background: var(--dark); color: white;
+    border-radius: 50%; font-family: 'Playfair Display', serif;
+    font-size: 1.15em; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .section-text h2 { font-size: 1.4em; }
+  .section-text p  { color: var(--gray); font-size: 0.88em; margin-top: 2px; }
+
+  /* ═══ TUTORIAL CARD ═══ */
+  .tutorial-section {
+    background: white; border-radius: 16px; border: 1px solid var(--border);
+    overflow: hidden; margin-bottom: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .tutorial-header {
+    padding: 22px 28px; border-bottom: 1px solid var(--border);
+    background: linear-gradient(to right, #f0f8ff, white);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .step-dot {
+    width: 32px; height: 32px; border-radius: 50%; background: var(--ocean);
+    color: white; font-size: 0.85em; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .step-dot.green   { background: var(--success); }
+  .step-dot.orange  { background: var(--warning); }
+  .step-dot.dark    { background: var(--dark); }
+
+  /* ═══ STEPS GRID ═══ */
+  .steps-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  }
+  .step-item {
+    padding: 20px 26px; border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border); transition: background 0.2s;
+  }
+  .step-item:hover { background: #f0f8ff; }
+  .step-item:nth-child(even) { border-right: none; }
+  .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .step-num {
+    width: 26px; height: 26px; border-radius: 50%; background: var(--ocean);
+    color: white; font-size: 0.75em; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .step-num.green  { background: var(--success); }
+  .step-num.orange { background: var(--warning); }
+  .step-num.dark   { background: var(--dark); }
+  .step-title { font-weight: 600; font-size: 0.92em; color: var(--dark); }
+  .step-desc  { color: #555; font-size: 0.855em; line-height: 1.6; }
+
+  /* ═══ MOCK UI ═══ */
+  .screen-preview {
+    background: #fafafa; border-radius: 12px; padding: 22px;
+    margin: 6px 26px 22px; border: 1px solid var(--border); position: relative;
+  }
+  .screen-preview::before {
+    content: attr(data-label);
+    position: absolute; top: -10px; left: 14px;
+    background: var(--ocean); color: white;
+    font-size: 0.68em; font-weight: 700;
+    padding: 2px 12px; border-radius: 10px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+
+  /* container mock */
+  .mock-container {
+    background: white; border-radius: 12px; padding: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07); max-width: 700px; margin: 0 auto;
+  }
+  .mock-h2 {
+    text-align: center; font-weight: 700; font-size: 1.05em;
+    color: var(--dark); margin-bottom: 18px;
+  }
+
+  /* filter box */
+  .mock-filter-box {
+    background: var(--ocean-pale); padding: 16px 18px; border-radius: 10px;
+    border-left: 5px solid var(--ocean); margin-bottom: 20px;
+  }
+  .mock-filter-row {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .mock-filter-label { font-size: 0.78em; font-weight: 700; color: var(--dark); }
+  .mock-date-input {
+    padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px;
+    font-size: 0.8em; background: white; color: var(--dark); min-width: 120px;
+  }
+  .mock-date-input.active {
+    border-color: var(--ocean); box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
+  }
+  .mock-btn {
+    padding: 8px 18px; border-radius: 6px; font-size: 0.8em;
+    font-weight: 700; border: none; cursor: pointer;
+  }
+  .mock-btn.ocean  { background: var(--ocean); color: white; }
+  .mock-btn.gray   { background: #eee; color: #666; }
+  .mock-btn.back   {
+    background: white; color: #334155; border: 1px solid var(--border);
+    padding: 7px 14px; border-radius: 8px; font-size: 0.78em; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+
+  /* date range banner */
+  .mock-date-banner {
+    text-align: center; padding: 10px 16px; background: #fff9e6;
+    border-radius: 8px; border: 1px solid var(--gold);
+    font-size: 0.8em; margin-bottom: 16px; color: #7d6008;
+  }
+
+  /* table */
+  .mock-table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+  .mock-table th {
+    background: var(--ocean); color: white; padding: 11px 14px; text-align: left;
+  }
+  .mock-table td { padding: 11px 14px; border-bottom: 1px solid #eee; }
+  .mock-table tr:hover td { background: #fcfcfc; }
+
+  .type-badge {
+    padding: 4px 10px; border-radius: 20px; font-size: 0.75em; font-weight: 700;
+    background: white; border: 1px solid var(--ocean); color: var(--ocean); text-transform: uppercase;
+  }
+  .price-tag { font-weight: 700; color: var(--success); font-size: 1em; }
+
+  .status-pill {
+    padding: 4px 12px; border-radius: 12px; font-size: 0.8em; font-weight: 700;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .status-pill.available { background: #eafaf1; color: var(--success); }
+  .status-pill.occupied  { background: #fef5e7; color: var(--warning); }
+
+  /* no results */
+  .mock-empty {
+    padding: 36px; text-align: center; color: var(--gray); font-size: 0.88em;
+  }
+
+  /* ═══ TIPS ═══ */
+  .tip {
+    display: flex; gap: 12px; padding: 13px 16px; border-radius: 8px;
+    font-size: 0.845em; line-height: 1.6; margin: 0 26px 20px;
+  }
+  .tip.info   { background: var(--ocean-pale);  border-left: 3px solid var(--ocean); }
+  .tip.ok     { background: #eafaf1;             border-left: 3px solid var(--success); }
+  .tip.warn   { background: #fef9e7;             border-left: 3px solid var(--gold); }
+  .tip.danger { background: #fdf2f2;             border-left: 3px solid var(--danger); }
+  .tip-icon { font-size: 1.1em; flex-shrink: 0; }
+  .tip strong { display: block; margin-bottom: 2px; color: var(--dark); }
+
+  /* ═══ STATUS LEGEND ═══ */
+  .legend-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0 26px 22px;
+  }
+  .legend-card {
+    background: white; border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start;
+  }
+  .legend-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.2em; flex-shrink: 0;
+  }
+  .legend-title { font-weight: 700; font-size: 0.9em; margin-bottom: 4px; }
+  .legend-desc  { font-size: 0.8em; color: #555; line-height: 1.5; }
+
+  /* ═══ DIVIDER ═══ */
+  .section-divider {
+    display: flex; align-items: center; gap: 16px; margin: 36px 0 28px;
+  }
+  .section-divider hr { flex: 1; border: none; border-top: 1px solid var(--border); }
+  .section-divider span { font-family: 'Playfair Display', serif; color: var(--gray); font-size: 0.85em; }
+
+  @media (max-width: 640px) {
+    .steps-grid { grid-template-columns: 1fr; }
+    .step-item:nth-child(even) { border-right: 1px solid var(--border); }
+    .legend-grid { grid-template-columns: 1fr; }
+    .mock-filter-row { flex-direction: column; align-items: flex-start; }
+    .hero h1 { font-size: 1.85em; }
+    .flow-step { font-size: 0.72em; padding: 8px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ BACK BAR ══ -->
+<div class="back-bar">
+  <div class="back-bar-brand">📋 Room Availability Tutorial</div>
+  <a href="help.jsp" class="btn-back"><span>←</span> Back to Help Center</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-badge">Staff Tutorial — Room Status</div>
+  <h1>Room <span>Availability</span><br>& Inventory Guide</h1>
+  <p>How to check live room occupancy, filter by date range, and read room statuses.</p>
+  <div class="flow-bar">
+    <div class="flow-step active"><span class="num">1</span>Open Screen</div>
+    <div class="flow-step"><span class="num">2</span>View All Rooms</div>
+    <div class="flow-step"><span class="num">3</span>Filter by Dates</div>
+    <div class="flow-step"><span class="num">4</span>Read Statuses</div>
+    <div class="flow-step"><span class="num">5</span>Reset & Navigate</div>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+  <!-- ══════════════════════════════════ -->
+  <!-- STEP 1: Open the Screen           -->
+  <!-- ══════════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">1</div>
+    <div class="section-text">
+      <h2>Open Room Inventory & Availability</h2>
+      <p>Access the room status screen from the main dashboard.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot dark">1</div>
+      <div>
+        <strong style="font-size:0.97em;">Navigate from the Dashboard</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">Click the Room Status card to open the inventory view.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Dashboard — Select Room Status">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:520px;margin:0 auto;">
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;">
+          <div style="font-size:1.8em;margin-bottom:6px;">👤</div>
+          <div style="font-weight:700;">Register Guest</div>
+        </div>
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;">
+          <div style="font-size:1.8em;margin-bottom:6px;">🔑</div>
+          <div style="font-weight:700;">New Reservation</div>
+        </div>
+        <!-- Highlighted card -->
+        <div style="background:linear-gradient(135deg,#f0f8ff,#e8f4fd);border:2px solid var(--ocean);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;box-shadow:0 0 0 3px rgba(41,128,185,0.15);">
+          <div style="font-size:1.8em;margin-bottom:6px;">📋</div>
+          <div style="font-weight:700;color:var(--ocean);">Room Status</div>
+          <div style="font-size:0.72em;color:var(--gray);margin-top:2px;">← Click this</div>
+        </div>
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;">
+          <div style="font-size:1.8em;margin-bottom:6px;">🚪</div>
+          <div style="font-weight:700;">Process Check-Out</div>
+        </div>
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;">
+          <div style="font-size:1.8em;margin-bottom:6px;">📅</div>
+          <div style="font-weight:700;">View Bookings</div>
+        </div>
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;">
+          <div style="font-size:1.8em;margin-bottom:6px;">🍽️</div>
+          <div style="font-weight:700;">Food Ordering</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip info">
+      <div class="tip-icon">💡</div>
+      <div><strong>Action</strong> On the dashboard, click <strong>📋 Room Status</strong>. The Room Inventory & Availability screen opens, showing all rooms and their current live occupancy status.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- STEP 2: View All Rooms            -->
+  <!-- ══════════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">2</div>
+    <div class="section-text">
+      <h2>View All Rooms (Default View)</h2>
+      <p>When the page first loads, it shows every room with its current live status.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot">2</div>
+      <div>
+        <strong style="font-size:0.97em;">The Room Inventory Table</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">Four columns: Room No., Category, Price/Night, and Live Status.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Room Inventory & Availability — Default View">
+      <div class="mock-container">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+          <button class="mock-btn back">← Back to Dashboard</button>
+        </div>
+        <div class="mock-h2">Room Inventory & Availability</div>
+
+        <div class="mock-filter-box">
+          <div class="mock-filter-row">
+            <span class="mock-filter-label">From:</span>
+            <div class="mock-date-input" style="color:#aaa;">Select date</div>
+            <span class="mock-filter-label">To:</span>
+            <div class="mock-date-input" style="color:#aaa;">Select date</div>
+            <button class="mock-btn ocean">Check Availability</button>
+            <button class="mock-btn gray">Reset</button>
+          </div>
+        </div>
+
+        <table class="mock-table">
+          <thead>
+            <tr><th>Room No.</th><th>Category</th><th>Price / Night</th><th>Live Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>101</strong></td>
+              <td><span class="type-badge">Deluxe</span></td>
+              <td class="price-tag">Rs. 8,500</td>
+              <td><span class="status-pill available">● AVAILABLE</span></td>
+            </tr>
+            <tr>
+              <td><strong>102</strong></td>
+              <td><span class="type-badge">Standard</span></td>
+              <td class="price-tag">Rs. 5,200</td>
+              <td><span class="status-pill occupied">● OCCUPIED</span></td>
+            </tr>
+            <tr>
+              <td><strong>201</strong></td>
+              <td><span class="type-badge">Suite</span></td>
+              <td class="price-tag">Rs. 14,000</td>
+              <td><span class="status-pill available">● AVAILABLE</span></td>
+            </tr>
+            <tr>
+              <td><strong>205</strong></td>
+              <td><span class="type-badge">Standard</span></td>
+              <td class="price-tag">Rs. 5,200</td>
+              <td><span class="status-pill occupied">● OCCUPIED</span></td>
+            </tr>
+            <tr>
+              <td><strong>302</strong></td>
+              <td><span class="type-badge">Deluxe</span></td>
+              <td class="price-tag">Rs. 9,000</td>
+              <td><span class="status-pill available">● AVAILABLE</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div class="step-title">Room No.</div>
+        </div>
+        <div class="step-desc">The room's number as it appears in the hotel. Used when making reservations or assigning guests.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div class="step-title">Category</div>
+        </div>
+        <div class="step-desc">The room type — <strong>Standard</strong>, <strong>Deluxe</strong>, or <strong>Suite</strong> — shown as a badge. Each type has different pricing and features.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">3</div>
+          <div class="step-title">Price / Night</div>
+        </div>
+        <div class="step-desc">The base nightly rate for that room in Sri Lankan Rupees. This is the rate used when calculating reservation bills.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num green">4</div>
+          <div class="step-title">Live Status</div>
+        </div>
+        <div class="step-desc"><strong style="color:var(--success);">● AVAILABLE</strong> — room is free right now. <strong style="color:var(--warning);">● OCCUPIED</strong> — room currently has a guest checked in.</div>
+      </div>
+    </div>
+
+    <div class="tip info">
+      <div class="tip-icon">💡</div>
+      <div><strong>Live Status vs. Date Filter</strong> The default view shows the <em>current live status</em> — whether each room is occupied right now. To check availability for <em>future dates</em>, use the date filter explained in the next step.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- STATUS LEGEND                     -->
+  <!-- ══════════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num" style="background:var(--ocean);">★</div>
+    <div class="section-text">
+      <h2>Understanding Room Statuses</h2>
+      <p>What each status indicator means and what action to take.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot dark">●</div>
+      <div>
+        <strong style="font-size:0.97em;">Status Indicator Reference</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">Green = free, Orange = occupied.</p>
+      </div>
+    </div>
+
+    <div class="legend-grid">
+      <div class="legend-card" style="border-color:#a9dfbf;">
+        <div class="legend-icon" style="background:#eafaf1;">✅</div>
+        <div>
+          <div class="legend-title" style="color:var(--success);">● AVAILABLE</div>
+          <div class="legend-desc">The room has no active booking for the current date (or the filtered date range). It is ready to be reserved for a new guest.</div>
+        </div>
+      </div>
+      <div class="legend-card" style="border-color:#f0b27a;">
+        <div class="legend-icon" style="background:#fef5e7;">🛏️</div>
+        <div>
+          <div class="legend-title" style="color:var(--warning);">● OCCUPIED</div>
+          <div class="legend-desc">A guest is currently staying in this room, or the room has an active booking covering the filtered date range. It cannot be booked until the guest checks out.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip warn">
+      <div class="tip-icon">⚠️</div>
+      <div><strong>Important</strong> A room showing <strong>AVAILABLE</strong> in the live view (no date filter) could still be reserved for future dates. Always use the <strong>date filter</strong> to confirm availability for specific check-in and check-out dates before creating a reservation.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- STEP 3: Filter by Dates           -->
+  <!-- ══════════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">3</div>
+    <div class="section-text">
+      <h2>Filter Availability by Date Range</h2>
+      <p>Check which rooms are free for a specific check-in and check-out period.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot">3</div>
+      <div>
+        <strong style="font-size:0.97em;">Use the Date Filter Box</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">Select From and To dates, then click Check Availability.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Date Filter — Entering Dates">
+      <div class="mock-container">
+        <div class="mock-filter-box">
+          <div class="mock-filter-row">
+            <span class="mock-filter-label">From:</span>
+            <div class="mock-date-input active">2025-08-10</div>
+            <span class="mock-filter-label">To:</span>
+            <div class="mock-date-input active">2025-08-15</div>
+            <button class="mock-btn ocean">Check Availability</button>
+            <button class="mock-btn gray">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div class="step-title">Click the "From" Date Field</div>
+        </div>
+        <div class="step-desc">Select the guest's intended <strong>check-in date</strong>. Past dates are automatically blocked — only today and future dates can be selected.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div class="step-title">Click the "To" Date Field</div>
+        </div>
+        <div class="step-desc">Select the intended <strong>check-out date</strong>. This must be after the From date — the system will enforce this automatically.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">3</div>
+          <div class="step-title">Click "Check Availability"</div>
+        </div>
+        <div class="step-desc">The table refreshes to show only rooms whose status covers the selected date range. OCCUPIED rooms have a booking overlapping those dates.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num green">4</div>
+          <div class="step-title">Read the Results</div>
+        </div>
+        <div class="step-desc">A yellow banner confirms the active filter period. Rooms showing <strong style="color:var(--success);">AVAILABLE</strong> can be safely booked for those dates.</div>
+      </div>
+    </div>
+
+    <!-- After filter applied -->
+    <div class="screen-preview" data-label="After Filter — Results for Aug 10–15">
+      <div class="mock-container">
+        <div class="mock-date-banner">
+          Showing room status for the period: <strong>2025-08-10</strong> — <strong>2025-08-15</strong>
+        </div>
+        <table class="mock-table">
+          <thead>
+            <tr><th>Room No.</th><th>Category</th><th>Price / Night</th><th>Live Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>101</strong></td>
+              <td><span class="type-badge">Deluxe</span></td>
+              <td class="price-tag">Rs. 8,500</td>
+              <td><span class="status-pill available">● AVAILABLE</span></td>
+            </tr>
+            <tr>
+              <td><strong>102</strong></td>
+              <td><span class="type-badge">Standard</span></td>
+              <td class="price-tag">Rs. 5,200</td>
+              <td><span class="status-pill occupied">● OCCUPIED</span></td>
+            </tr>
+            <tr>
+              <td><strong>201</strong></td>
+              <td><span class="type-badge">Suite</span></td>
+              <td class="price-tag">Rs. 14,000</td>
+              <td><span class="status-pill available">● AVAILABLE</span></td>
+            </tr>
+            <tr>
+              <td><strong>302</strong></td>
+              <td><span class="type-badge">Deluxe</span></td>
+              <td class="price-tag">Rs. 9,000</td>
+              <td><span class="status-pill available">● AVAILABLE</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tip ok">
+      <div class="tip-icon">✅</div>
+      <div><strong>Pro Tip — Use This Before Booking</strong> Always run a date filter matching the guest's intended stay before starting a reservation. This gives you a clear list of bookable rooms to reference during the <strong>🔑 New Reservation</strong> wizard's room selection step.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- STEP 4: No Rooms / Empty Result   -->
+  <!-- ══════════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">4</div>
+    <div class="section-text">
+      <h2>When No Rooms Are Available</h2>
+      <p>What to do if all rooms are occupied for the selected dates.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot orange">!</div>
+      <div>
+        <strong style="font-size:0.97em;">All Rooms Fully Occupied</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">The table shows an empty state when no rooms match the criteria.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="No Results State">
+      <div class="mock-container">
+        <div class="mock-date-banner">
+          Showing room status for the period: <strong>2025-12-24</strong> — <strong>2025-12-27</strong>
+        </div>
+        <table class="mock-table">
+          <thead>
+            <tr><th>Room No.</th><th>Category</th><th>Price / Night</th><th>Live Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="4">
+                <div class="mock-empty">
+                  <div style="font-size:2em;margin-bottom:8px;">🏨</div>
+                  <div>No rooms match your search criteria.</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num orange">1</div>
+          <div class="step-title">Try Adjusting the Dates</div>
+        </div>
+        <div class="step-desc">Click <strong>Reset</strong> and enter a different date range — perhaps shift the check-in or check-out by one or two days to find an opening.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num orange">2</div>
+          <div class="step-title">Check a Shorter Stay</div>
+        </div>
+        <div class="step-desc">A shorter stay period may have available rooms. Try reducing the date range to identify which specific days are fully booked.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">3</div>
+          <div class="step-title">Inform the Guest</div>
+        </div>
+        <div class="step-desc">Let the guest know there are no rooms for their requested dates and offer alternative dates or a waitlist if the resort supports it.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">4</div>
+          <div class="step-title">Check View Bookings</div>
+        </div>
+        <div class="step-desc">Go to <strong>📅 View Bookings</strong> to see which rooms have check-outs scheduled — one may free up on the date the guest needs.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- STEP 5: Reset & Navigate          -->
+  <!-- ══════════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">5</div>
+    <div class="section-text">
+      <h2>Reset the Filter & Navigate Away</h2>
+      <p>Clear the date filter or return to the dashboard.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot green">5</div>
+      <div>
+        <strong style="font-size:0.97em;">Reset & Back Buttons</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">Clear the filter to restore the full room list, or go back to the dashboard.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Reset & Navigation Controls">
+      <div class="mock-container">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+          <button class="mock-btn back">← Back to Dashboard</button>
+        </div>
+        <div class="mock-filter-box">
+          <div class="mock-filter-row">
+            <span class="mock-filter-label">From:</span>
+            <div class="mock-date-input active">2025-08-10</div>
+            <span class="mock-filter-label">To:</span>
+            <div class="mock-date-input active">2025-08-15</div>
+            <button class="mock-btn ocean">Check Availability</button>
+            <button class="mock-btn gray" style="border:2px solid #aaa;">Reset ← click to clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div class="step-title">Click "Reset"</div>
+        </div>
+        <div class="step-desc">Clears the date filter and reloads the page showing all rooms with their current live status — no date range applied.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div class="step-title">Click "← Back to Dashboard"</div>
+        </div>
+        <div class="step-desc">The back button is in the top-right corner of the container. Click it to return to the main staff dashboard at any time.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num green">3</div>
+          <div class="step-title">Ready to Make a Booking?</div>
+        </div>
+        <div class="step-desc">Once you've identified the available rooms for the guest's dates, go back to the dashboard and click <strong>🔑 New Reservation</strong> to start the booking wizard.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num green">4</div>
+          <div class="step-title">Note Down Room Numbers</div>
+        </div>
+        <div class="step-desc">Keep a note of which room numbers showed AVAILABLE — you'll need to select them in Step 2 of the reservation wizard.</div>
+      </div>
+    </div>
+
+    <div class="tip ok">
+      <div class="tip-icon">✅</div>
+      <div><strong>Recommended Workflow</strong> Check room availability here <em>first</em>, note the available rooms and rates, then return to the dashboard to start <strong>🔑 New Reservation</strong> — this way the room selection step in the wizard will be much faster.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- QUICK REFERENCE                   -->
+  <!-- ══════════════════════════════════ -->
+  <div class="section-divider">
+    <hr><span>Quick Reference</span><hr>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot dark">?</div>
+      <div><strong style="font-size:0.97em;">Common Questions & Scenarios</strong></div>
+    </div>
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num dark">?</div>
+          <div class="step-title">Room shows AVAILABLE but can't be booked</div>
+        </div>
+        <div class="step-desc">The live view shows today's status. Run the date filter for the guest's exact dates — it may already be reserved for that period.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num dark">?</div>
+          <div class="step-title">How do I see who's in an OCCUPIED room?</div>
+        </div>
+        <div class="step-desc">Go to <strong>📅 View Bookings</strong> on the dashboard and search or filter by room number to see the current guest's details.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num dark">?</div>
+          <div class="step-title">Prices shown here vs. reservation wizard differ</div>
+        </div>
+        <div class="step-desc">The prices here are the base nightly rates. The reservation bill may be different after automatic discounts (long stay / multi-room) are applied.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num dark">?</div>
+          <div class="step-title">Filter shows dates in the past</div>
+        </div>
+        <div class="step-desc">The system blocks past dates in the date picker. If you need to check historical occupancy, use <strong>📅 View Bookings</strong> and filter by date range there.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:28px 0 16px;color:var(--gray);font-size:0.82em;">
+    Ocean View Resort — Room Availability Tutorial &nbsp;·&nbsp; Visit the 💡 <strong>Help Center</strong> for more guides.
+  </div>
+
+</div><!-- /main -->
+</body>
+</html>

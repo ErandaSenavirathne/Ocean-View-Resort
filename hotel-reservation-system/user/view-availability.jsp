@@ -54,7 +54,27 @@
         .btn { padding: 12px 25px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; border: none; transition: 0.3s; text-decoration: none; text-align: center; display: inline-block; }
         
         .btn-filter { background: var(--ocean-blue); color: white; }
-        .btn-back { background: #95a5a6; color: white; }
+        .btn-back {
+            text-decoration: none;
+            background: white;
+            color: #334155;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            display: inline-flex; 
+            align-items: center;
+            gap: 8px;
+            float: right; /* Moves it to the right corner */
+        }
+
+        .btn-back:hover {
+            background: #f1f5f9;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
         .btn-clear { background: #eee; color: #666; font-size: 0.9em; }
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
@@ -65,7 +85,10 @@
 
 <div class="container">
     <div class="btn-group">
-        <a href="${pageContext.request.contextPath}/user/user-dashboard.jsp" class="btn btn-back">Back</a>
+    <a href="${pageContext.request.contextPath}/user/user-dashboard.jsp" class="btn-back">
+            <span>←</span> Back to Dashboard
+        </a>
+        
     </div>
     
     <h2>Room Inventory & Availability</h2>

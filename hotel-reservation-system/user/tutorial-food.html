@@ -1,0 +1,995 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Ordering Tutorial — Ocean View Resort</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #e67e22;
+    --orange-pale: #fef5ec;
+    --orange-dark: #d35400;
+    --dark: #2c3e50;
+    --success: #27ae60;
+    --danger: #c0392b;
+    --gray: #7f8c8d;
+    --border: #e8eef2;
+    --bg: #f4f7f6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ═══ BACK BAR ═══ */
+  .back-bar {
+    padding: 12px 28px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .back-bar-brand {
+    font-size: 0.8em;
+    font-weight: 700;
+    color: var(--gray);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .btn-back {
+    text-decoration: none;
+    background: white;
+    color: #334155;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-back:hover {
+    background: #f1f5f9;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  }
+
+  /* ═══ HERO ═══ */
+  .hero {
+    background: linear-gradient(135deg, #1a2a3a 0%, var(--dark) 50%, #b7450f 100%);
+    padding: 52px 40px 44px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #f5cba7;
+    padding: 5px 18px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    color: white;
+    font-size: 2.6em;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .hero h1 span { color: #f0a500; }
+  .hero p {
+    color: rgba(255,255,255,0.6);
+    font-size: 1em;
+    font-weight: 300;
+    max-width: 480px;
+    margin: 0 auto 32px;
+  }
+
+  /* ═══ FLOW BAR ═══ */
+  .flow-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  .flow-step {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: white;
+    padding: 9px 18px;
+    font-size: 0.8em;
+    font-weight: 600;
+    cursor: default;
+    position: relative;
+  }
+  .flow-step:first-child { border-radius: 8px 0 0 8px; }
+  .flow-step:last-child  { border-radius: 0 8px 8px 0; }
+  .flow-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255,255,255,0.35);
+    font-size: 0.85em;
+    z-index: 1;
+  }
+  .flow-step.active { background: var(--orange); border-color: var(--orange); }
+  .flow-step .num {
+    display: inline-block;
+    width: 19px; height: 19px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    font-size: 0.72em;
+    line-height: 19px;
+    text-align: center;
+    margin-right: 6px;
+  }
+
+  /* ═══ MAIN ═══ */
+  .main { max-width: 1060px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  /* ═══ SECTION LABEL ═══ */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .section-num {
+    width: 42px; height: 42px;
+    background: var(--dark);
+    color: white;
+    border-radius: 50%;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15em;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-text h2 { font-size: 1.4em; }
+  .section-text p  { color: var(--gray); font-size: 0.88em; margin-top: 2px; }
+
+  /* ═══ TUTORIAL CARD ═══ */
+  .tutorial-section {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .tutorial-header {
+    padding: 22px 28px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(to right, #fffaf5, white);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .step-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: white;
+    font-size: 0.85em;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-dot.green  { background: var(--success); }
+  .step-dot.red    { background: var(--danger); }
+  .step-dot.dark   { background: var(--dark); }
+
+  /* ═══ STEPS GRID ═══ */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .step-item {
+    padding: 20px 26px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .step-item:hover { background: #fffaf5; }
+  .step-item:nth-child(even) { border-right: none; }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .step-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: white;
+    font-size: 0.75em;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-num.green { background: var(--success); }
+  .step-num.red   { background: var(--danger); }
+  .step-num.dark  { background: var(--dark); }
+  .step-title { font-weight: 600; font-size: 0.92em; color: var(--dark); }
+  .step-desc  { color: #555; font-size: 0.855em; line-height: 1.6; }
+
+  /* ═══ MOCK UI ═══ */
+  .screen-preview {
+    background: #fafafa;
+    border-radius: 12px;
+    padding: 22px;
+    margin: 6px 26px 22px;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .screen-preview::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -10px; left: 14px;
+    background: var(--orange);
+    color: white;
+    font-size: 0.68em;
+    font-weight: 700;
+    padding: 2px 12px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* POS layout mock */
+  .mock-pos {
+    display: flex;
+    gap: 16px;
+    min-height: 280px;
+  }
+  .mock-left  { flex: 2; border-right: 2px solid #eee; padding-right: 16px; }
+  .mock-right { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+
+  .mock-search-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+  .mock-search-label { font-size: 0.75em; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+  .mock-input-row { display: flex; gap: 8px; }
+  .mock-input {
+    flex: 1;
+    padding: 9px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.82em;
+    color: var(--dark);
+    background: white;
+  }
+  .mock-input.active { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(230,126,34,0.12); }
+  .mock-btn {
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+  }
+  .mock-btn.dark    { background: var(--dark);    color: white; }
+  .mock-btn.orange  { background: var(--orange);  color: white; }
+  .mock-btn.success { background: var(--success); color: white; }
+  .mock-btn.danger  { background: var(--danger);  color: white; }
+  .mock-btn.gray    { background: #eee;            color: #555; }
+  .mock-btn.outline { background: white; color: var(--orange); border: 1px solid var(--orange); }
+
+  /* guest result item */
+  .mock-result {
+    padding: 9px 12px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    font-size: 0.8em;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  .mock-result.selected { background: #fff4e5; border-color: var(--orange); }
+  .mock-result-room { color: var(--orange); font-weight: 700; }
+
+  /* guest selected banner */
+  .mock-selected-banner {
+    background: #eafaf1;
+    border: 1px solid var(--success);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.8em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .mock-selected-banner strong { color: var(--success); }
+
+  /* category tabs */
+  .mock-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+  .mock-tab {
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 0.76em;
+    font-weight: 700;
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    background: white;
+    cursor: pointer;
+  }
+  .mock-tab.active { background: var(--orange); color: white; }
+
+  /* food grid */
+  .mock-food-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .mock-food-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 6px;
+    text-align: center;
+    font-size: 0.72em;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  .mock-food-item:hover   { border-color: var(--orange); background: #fff8f0; }
+  .mock-food-item.adding  { border-color: var(--orange); background: #fff8f0; transform: scale(1.04); }
+  .mock-food-name  { font-weight: 700; color: var(--dark); margin-bottom: 3px; }
+  .mock-food-price { color: var(--orange); font-weight: 700; }
+
+  /* cart panel */
+  .mock-cart-header { font-weight: 700; font-size: 0.88em; color: var(--dark); border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; margin-bottom: 10px; }
+  .mock-cart-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 0;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 0.78em;
+  }
+  .cart-trash { color: var(--danger); font-size: 0.9em; cursor: pointer; }
+  .cart-name  { flex: 1; color: var(--dark); }
+  .cart-price { font-weight: 700; color: var(--dark); }
+  .mock-total {
+    font-size: 0.9em;
+    font-weight: 700;
+    color: var(--dark);
+    border-top: 2px solid #eee;
+    padding-top: 8px;
+    margin-top: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .mock-total span { color: var(--success); }
+
+  /* ═══ TIP BOXES ═══ */
+  .tip {
+    display: flex;
+    gap: 12px;
+    padding: 13px 16px;
+    border-radius: 8px;
+    font-size: 0.845em;
+    line-height: 1.6;
+    margin: 0 26px 20px;
+  }
+  .tip.info   { background: #fff4e5; border-left: 3px solid var(--orange); }
+  .tip.ok     { background: #eafaf1; border-left: 3px solid var(--success); }
+  .tip.warn   { background: #fef9e7; border-left: 3px solid #f1c40f; }
+  .tip.danger { background: #fdf2f2; border-left: 3px solid var(--danger); }
+  .tip-icon { font-size: 1.1em; flex-shrink: 0; }
+  .tip strong { display: block; margin-bottom: 2px; color: var(--dark); }
+
+  /* ═══ MODAL MOCK ═══ */
+  .mock-modal {
+    background: white;
+    border-radius: 14px;
+    padding: 22px 24px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    max-width: 300px;
+    margin: 0 auto;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .mock-modal-icon  { font-size: 2em; margin-bottom: 8px; }
+  .mock-modal-title { font-weight: 700; font-size: 0.95em; color: var(--dark); margin-bottom: 5px; }
+  .mock-modal-msg   { font-size: 0.78em; color: #666; margin-bottom: 14px; line-height: 1.5; }
+  .mock-modal-btns  { display: flex; gap: 8px; justify-content: center; }
+
+  /* ═══ SECTION DIVIDER ═══ */
+  .section-divider {
+    display: flex; align-items: center; gap: 16px; margin: 36px 0 28px;
+  }
+  .section-divider hr { flex: 1; border: none; border-top: 1px solid var(--border); }
+  .section-divider span { font-family: 'Playfair Display', serif; color: var(--gray); font-size: 0.85em; }
+
+  /* ═══ SUCCESS MODAL MOCK ═══ */
+  .mock-success-modal {
+    background: white;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    max-width: 320px;
+    margin: 0 auto;
+    text-align: center;
+    border: 1px solid #d5f0e0;
+  }
+
+  @media (max-width: 640px) {
+    .steps-grid       { grid-template-columns: 1fr; }
+    .step-item:nth-child(even) { border-right: 1px solid var(--border); }
+    .mock-food-grid   { grid-template-columns: repeat(2, 1fr); }
+    .mock-pos         { flex-direction: column; }
+    .mock-left        { border-right: none; padding-right: 0; border-bottom: 2px solid #eee; padding-bottom: 14px; }
+    .hero h1          { font-size: 1.85em; }
+    .flow-step        { font-size: 0.72em; padding: 8px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ BACK BAR ══ -->
+<div class="back-bar">
+  <div class="back-bar-brand">🍽️ Food Ordering Tutorial</div>
+  <a href="help.jsp" class="btn-back"><span>←</span> Back to Help Center</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-badge">Staff Tutorial — Food POS</div>
+  <h1>Food <span>Ordering</span><br>System Guide</h1>
+  <p>How to place meal orders for guests and add charges directly to their room bill.</p>
+  <div class="flow-bar">
+    <div class="flow-step active"><span class="num">1</span>Open POS</div>
+    <div class="flow-step"><span class="num">2</span>Find Guest</div>
+    <div class="flow-step"><span class="num">3</span>Select Items</div>
+    <div class="flow-step"><span class="num">4</span>Review Cart</div>
+    <div class="flow-step"><span class="num">5</span>Confirm Order</div>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+  <!-- ═══════════════════════════════ -->
+  <!-- STEP 1: Open POS               -->
+  <!-- ═══════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">1</div>
+    <div class="section-text">
+      <h2>Open the Food Ordering System</h2>
+      <p>Access the POS from the main staff dashboard.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot dark">1</div>
+      <div>
+        <strong style="font-size:0.97em;">Navigate from the Dashboard</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">Click the Food Ordering card to launch the POS screen.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Dashboard — Select Food Ordering">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:520px;margin:0 auto;">
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;">
+          <div style="font-size:1.8em;margin-bottom:6px;">👤</div>
+          <div style="font-weight:700;">Register Guest</div>
+        </div>
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;">
+          <div style="font-size:1.8em;margin-bottom:6px;">🔑</div>
+          <div style="font-weight:700;">New Reservation</div>
+        </div>
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;">
+          <div style="font-size:1.8em;margin-bottom:6px;">📋</div>
+          <div style="font-weight:700;">Room Status</div>
+        </div>
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;">
+          <div style="font-size:1.8em;margin-bottom:6px;">🚪</div>
+          <div style="font-weight:700;">Process Check-Out</div>
+        </div>
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;">
+          <div style="font-size:1.8em;margin-bottom:6px;">📅</div>
+          <div style="font-weight:700;">View Bookings</div>
+        </div>
+        <!-- Highlighted card -->
+        <div style="background:linear-gradient(135deg,#fff4e5,#fff8f0);border:2px solid var(--orange);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;box-shadow:0 0 0 3px rgba(230,126,34,0.15);">
+          <div style="font-size:1.8em;margin-bottom:6px;">🍽️</div>
+          <div style="font-weight:700;color:var(--orange);">Food Ordering</div>
+          <div style="font-size:0.72em;color:var(--gray);margin-top:2px;">← Click this</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip info">
+      <div class="tip-icon">💡</div>
+      <div><strong>Action</strong> On the dashboard, click <strong>🍽️ Food Ordering</strong>. The POS screen opens — it is split into two panels: the left panel for finding guests and selecting food items, and the right panel showing the order cart.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ -->
+  <!-- STEP 2: Find Guest             -->
+  <!-- ═══════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">2</div>
+    <div class="section-text">
+      <h2>Find & Select the Guest</h2>
+      <p>Search by guest name or room number to load their active booking.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot">2</div>
+      <div>
+        <strong style="font-size:0.97em;">Search for the Guest</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">Type a name or room number in the search box.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="POS Screen — Find Guest">
+      <div class="mock-pos">
+        <div class="mock-left">
+          <div style="font-weight:700;font-size:0.95em;margin-bottom:12px;">🍽️ Food Ordering System</div>
+          <!-- Search box -->
+          <div class="mock-search-box">
+            <div class="mock-search-label">1. Find Guest</div>
+            <div class="mock-input-row">
+              <div class="mock-input active">John Silva&nbsp;</div>
+              <button class="mock-btn dark">Search</button>
+            </div>
+            <!-- Results appear below -->
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid #eee;">
+              <div class="mock-result selected">
+                <span><strong>John Silva</strong></span>
+                <span class="mock-result-room">Room: 101</span>
+              </div>
+              <div class="mock-result">
+                <span><strong>Priya Perera</strong></span>
+                <span class="mock-result-room">Room: 205</span>
+              </div>
+            </div>
+          </div>
+          <!-- Category tabs placeholder -->
+          <div class="mock-tabs">
+            <div class="mock-tab active">All Items</div>
+            <div class="mock-tab">Breakfast</div>
+            <div class="mock-tab">Lunch</div>
+            <div class="mock-tab">Dinner</div>
+          </div>
+          <div style="color:var(--gray);font-size:0.75em;text-align:center;padding:10px 0;">Select a guest first to enable ordering</div>
+        </div>
+        <div class="mock-right">
+          <div class="mock-cart-header">Order Summary</div>
+          <div style="color:#bbb;font-size:0.78em;text-align:center;padding:20px 0;">No items added yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div class="step-title">Type in the Search Box</div>
+        </div>
+        <div class="step-desc">Enter the guest's <strong>name</strong> (e.g. "John") or their <strong>room number</strong> (e.g. "101"). Either works.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div class="step-title">Click "Search"</div>
+        </div>
+        <div class="step-desc">A list of matching active reservations will appear below the search box.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">3</div>
+          <div class="step-title">Click the Correct Guest</div>
+        </div>
+        <div class="step-desc">Tap the matching result to select them. Their name and room number will be confirmed in a green banner.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num green">4</div>
+          <div class="step-title">Guest Confirmed</div>
+        </div>
+        <div class="step-desc">The search panel collapses and a confirmation banner shows the selected guest. You can click <strong>Change</strong> to re-search if needed.</div>
+      </div>
+    </div>
+
+    <!-- After selection state -->
+    <div class="screen-preview" data-label="After Guest Selected">
+      <div style="max-width:480px;">
+        <div class="mock-selected-banner">
+          <div><strong>Guest:</strong> <span style="margin-left:8px;font-weight:600;">John Silva</span> <span style="margin-left:8px;color:#666;">(Room: 101)</span></div>
+          <button class="mock-btn gray" style="font-size:0.72em;padding:5px 10px;">Change</button>
+        </div>
+        <div style="color:var(--success);font-size:0.8em;font-weight:600;">✔ Guest loaded — now select food items below.</div>
+      </div>
+    </div>
+
+    <div class="tip warn">
+      <div class="tip-icon">⚠️</div>
+      <div><strong>No Results?</strong> Only guests with an <em>active (BOOKED)</em> reservation will appear. If the guest has already checked out or their booking was cancelled, they won't show up. Verify their booking status in <strong>📅 View Bookings</strong>.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ -->
+  <!-- STEP 3: Select Food Items      -->
+  <!-- ═══════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">3</div>
+    <div class="section-text">
+      <h2>Browse & Select Food Items</h2>
+      <p>Filter by category and add items to the order cart.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot">3</div>
+      <div>
+        <strong style="font-size:0.97em;">Use Category Tabs to Filter</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">Browse Breakfast, Lunch, Dinner, or view All Items.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="POS Screen — Selecting Items">
+      <div class="mock-pos">
+        <div class="mock-left">
+          <div class="mock-selected-banner" style="margin-bottom:12px;">
+            <div><strong>Guest:</strong> <span style="margin-left:8px;font-weight:600;">John Silva</span> <span style="margin-left:8px;color:#666;">(Room: 101)</span></div>
+            <button class="mock-btn gray" style="font-size:0.7em;padding:4px 8px;">Change</button>
+          </div>
+          <div class="mock-tabs">
+            <div class="mock-tab">All Items</div>
+            <div class="mock-tab active">Breakfast</div>
+            <div class="mock-tab">Lunch</div>
+            <div class="mock-tab">Dinner</div>
+          </div>
+          <div class="mock-food-grid">
+            <div class="mock-food-item adding">
+              <div class="mock-food-name">Egg Omelette</div>
+              <div class="mock-food-price">Rs. 450</div>
+            </div>
+            <div class="mock-food-item">
+              <div class="mock-food-name">Toast & Jam</div>
+              <div class="mock-food-price">Rs. 280</div>
+            </div>
+            <div class="mock-food-item">
+              <div class="mock-food-name">Pancakes</div>
+              <div class="mock-food-price">Rs. 550</div>
+            </div>
+            <div class="mock-food-item">
+              <div class="mock-food-name">Fruit Bowl</div>
+              <div class="mock-food-price">Rs. 380</div>
+            </div>
+            <div class="mock-food-item">
+              <div class="mock-food-name">Coffee</div>
+              <div class="mock-food-price">Rs. 200</div>
+            </div>
+            <div class="mock-food-item">
+              <div class="mock-food-name">Orange Juice</div>
+              <div class="mock-food-price">Rs. 250</div>
+            </div>
+          </div>
+        </div>
+        <!-- Cart updating -->
+        <div class="mock-right">
+          <div class="mock-cart-header">Order Summary</div>
+          <div class="mock-cart-row">
+            <span class="cart-trash">🗑️</span>
+            <span class="cart-name">Egg Omelette <strong>x2</strong></span>
+            <span class="cart-price">Rs. 900</span>
+          </div>
+          <div class="mock-cart-row">
+            <span class="cart-trash">🗑️</span>
+            <span class="cart-name">Coffee <strong>x1</strong></span>
+            <span class="cart-price">Rs. 200</span>
+          </div>
+          <div class="mock-total">Total: <span>Rs. 1,100.00</span></div>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">
+            <button class="mock-btn danger" style="width:100%;font-size:0.76em;padding:8px;">Clear Selection</button>
+            <button class="mock-btn success" style="width:100%;font-size:0.76em;padding:8px;">Add to Room Bill ✓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div class="step-title">Filter by Category</div>
+        </div>
+        <div class="step-desc">Click <strong>Breakfast</strong>, <strong>Lunch</strong>, or <strong>Dinner</strong> tabs to filter items. Use <strong>All Items</strong> to see the full menu.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div class="step-title">Click an Item to Add</div>
+        </div>
+        <div class="step-desc">Tap any food card to add it to the cart. Tapping the same item again increases the quantity by 1.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">3</div>
+          <div class="step-title">Cart Updates Instantly</div>
+        </div>
+        <div class="step-desc">The right panel shows each item, quantity, and subtotal. The grand total at the bottom updates automatically.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num red">4</div>
+          <div class="step-title">Remove an Item</div>
+        </div>
+        <div class="step-desc">Click the 🗑️ icon next to any cart item to remove it entirely. To clear everything, use <strong>Clear Selection</strong>.</div>
+      </div>
+    </div>
+
+    <div class="tip info">
+      <div class="tip-icon">🍽️</div>
+      <div><strong>Multiple Items</strong> You can order across different categories in a single session — for example, add breakfast items and drinks together. All items will be billed in one order.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ -->
+  <!-- STEP 4: Review Cart            -->
+  <!-- ═══════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">4</div>
+    <div class="section-text">
+      <h2>Review the Order Cart</h2>
+      <p>Check all items and total before adding to the room bill.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot dark">4</div>
+      <div>
+        <strong style="font-size:0.97em;">Verify the Order Summary</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">Confirm items, quantities, and the final total with the guest.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Cart Review Panel">
+      <div style="max-width:300px;margin:0 auto;">
+        <div style="font-weight:700;font-size:0.9em;border-bottom:2px solid #eee;padding-bottom:8px;margin-bottom:10px;color:var(--dark);">Order Summary</div>
+        <div class="mock-cart-row">
+          <span class="cart-trash">🗑️</span>
+          <span class="cart-name">Egg Omelette <strong>x2</strong></span>
+          <span class="cart-price">Rs. 900</span>
+        </div>
+        <div class="mock-cart-row">
+          <span class="cart-trash">🗑️</span>
+          <span class="cart-name">Coffee <strong>x1</strong></span>
+          <span class="cart-price">Rs. 200</span>
+        </div>
+        <div class="mock-cart-row">
+          <span class="cart-trash">🗑️</span>
+          <span class="cart-name">Orange Juice <strong>x1</strong></span>
+          <span class="cart-price">Rs. 250</span>
+        </div>
+        <div class="mock-total" style="margin-top:8px;">Total: <span>Rs. 1,350.00</span></div>
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px;">
+          <button class="mock-btn danger" style="width:100%;padding:9px;font-size:0.8em;">Clear Selection</button>
+          <button class="mock-btn success" style="width:100%;padding:11px;font-size:0.85em;font-weight:700;">Add to Room Bill ✓</button>
+          <div style="text-align:center;font-size:0.75em;color:#999;margin-top:2px;">Back to Dashboard</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div class="step-title">Check Each Line Item</div>
+        </div>
+        <div class="step-desc">Verify every item name and quantity matches what the guest ordered. Use 🗑️ to remove anything incorrect.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div class="step-title">Confirm the Grand Total</div>
+        </div>
+        <div class="step-desc">Show the total to the guest so they know the amount being added to their room bill before you confirm.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num red">3</div>
+          <div class="step-title">Need to Start Over?</div>
+        </div>
+        <div class="step-desc">Click <strong>Clear Selection</strong> — a confirmation popup will appear. Confirm to empty the entire cart and start fresh.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num green">4</div>
+          <div class="step-title">Ready? Proceed to Confirm</div>
+        </div>
+        <div class="step-desc">Once everything looks correct, click the green <strong>Add to Room Bill ✓</strong> button to finalize the order.</div>
+      </div>
+    </div>
+
+    <!-- Clear cart modal -->
+    <div class="screen-preview" data-label="Clear Cart Confirmation Popup" style="margin-top:0;">
+      <div class="mock-modal">
+        <div class="mock-modal-icon">🗑️</div>
+        <div class="mock-modal-title">Clear Selection?</div>
+        <div class="mock-modal-msg">Remove all items from the current order?</div>
+        <div class="mock-modal-btns">
+          <button class="mock-btn danger" style="font-size:0.76em;padding:8px 14px;">Yes, Clear All</button>
+          <button class="mock-btn gray"   style="font-size:0.76em;padding:8px 14px;">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip warn">
+      <div class="tip-icon">⚠️</div>
+      <div><strong>Validation Checks</strong> The system will block submission with a popup if: (1) no guest is selected, or (2) the cart is empty. Make sure both are filled before clicking <strong>Add to Room Bill</strong>.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ -->
+  <!-- STEP 5: Confirm Order          -->
+  <!-- ═══════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">5</div>
+    <div class="section-text">
+      <h2>Confirm & Submit the Order</h2>
+      <p>The order is sent to the kitchen and charges are added to the guest's room bill.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot green">5</div>
+      <div>
+        <strong style="font-size:0.97em;">Order Placed Successfully</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">A confirmation popup confirms the order was processed.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Order Confirmation Popup">
+      <div class="mock-success-modal">
+        <div style="font-size:2.2em;color:var(--success);margin-bottom:10px;">✔</div>
+        <div style="font-weight:700;font-size:1em;color:var(--dark);margin-bottom:6px;">Order Placed!</div>
+        <div style="font-size:0.82em;color:#666;margin-bottom:18px;line-height:1.5;">The food items have been successfully added to the room bill.</div>
+        <div style="display:flex;gap:10px;justify-content:center;">
+          <button class="mock-btn gray"  style="font-size:0.78em;padding:9px 16px;">New Order</button>
+          <button class="mock-btn dark"  style="font-size:0.78em;padding:9px 16px;">Dashboard</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num green">1</div>
+          <div class="step-title">Success Popup Appears</div>
+        </div>
+        <div class="step-desc">A green <strong>"Order Placed!"</strong> popup confirms the food items were added to the guest's room bill automatically.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num green">2</div>
+          <div class="step-title">Click "New Order"</div>
+        </div>
+        <div class="step-desc">Returns you to the food ordering screen with a fresh empty cart — ready to take another order immediately.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num">3</div>
+          <div class="step-title">Click "Dashboard"</div>
+        </div>
+        <div class="step-desc">Returns you to the main staff dashboard if no more food orders need to be placed right now.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num red">4</div>
+          <div class="step-title">If an Error Appears</div>
+        </div>
+        <div class="step-desc">A red error popup means the order could not be saved. Click <strong>New Order</strong> to retry — do not submit twice from the same screen.</div>
+      </div>
+    </div>
+
+    <!-- Error modal -->
+    <div class="screen-preview" data-label="Error Popup (System Error)">
+      <div class="mock-modal">
+        <div class="mock-modal-icon">✖</div>
+        <div class="mock-modal-title" style="color:var(--danger);">System Error</div>
+        <div class="mock-modal-msg">Could not process the order. Please try again.</div>
+        <div class="mock-modal-btns">
+          <button class="mock-btn gray" style="font-size:0.76em;padding:8px 14px;">New Order</button>
+          <button class="mock-btn dark" style="font-size:0.76em;padding:8px 14px;">Dashboard</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip ok">
+      <div class="tip-icon">✅</div>
+      <div><strong>Order Complete!</strong> The food charges are now part of the guest's room bill. They will appear in the total amount due when staff processes their check-out via <strong>🚪 Process Check-Out</strong>.</div>
+    </div>
+  </div>
+
+  <!-- ═══ QUICK REFERENCE ═══ -->
+  <div class="section-divider">
+    <hr><span>Quick Reference</span><hr>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot dark">?</div>
+      <div><strong style="font-size:0.97em;">Common Scenarios & What To Do</strong></div>
+    </div>
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num dark">?</div>
+          <div class="step-title">Guest not appearing in search</div>
+        </div>
+        <div class="step-desc">Only <strong>active (BOOKED)</strong> reservations appear. Check their booking status in <strong>📅 View Bookings</strong> on the dashboard.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num dark">?</div>
+          <div class="step-title">Wrong guest was selected</div>
+        </div>
+        <div class="step-desc">Click the <strong>Change</strong> button on the green confirmation banner to open the search again without losing your cart items.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num dark">?</div>
+          <div class="step-title">Added wrong quantity of an item</div>
+        </div>
+        <div class="step-desc">Remove the item using the 🗑️ icon, then re-add it the correct number of times by clicking its card.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-num dark">?</div>
+          <div class="step-title">Want to check total before confirming</div>
+        </div>
+        <div class="step-desc">The running total is always visible at the bottom of the cart panel on the right. It updates instantly as items are added or removed.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:28px 0 16px;color:var(--gray);font-size:0.82em;">
+    Ocean View Resort — Food Ordering Tutorial &nbsp;·&nbsp; Visit the 💡 <strong>Help Center</strong> for more guides.
+  </div>
+
+</div><!-- /main -->
+</body>
+</html>

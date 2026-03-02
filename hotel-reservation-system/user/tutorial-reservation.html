@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ocean View Resort — Staff Tutorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ocean: #1a6fa3;
+    --ocean-light: #2980b9;
+    --ocean-pale: #ebf5fb;
+    --dark: #1c2b3a;
+    --success: #27ae60;
+    --danger: #c0392b;
+    --gold: #f39c12;
+    --gray: #7f8c8d;
+    --border: #e8eef2;
+    --white: #ffffff;
+    --bg: #f0f4f8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .btn-back {
+    text-decoration: none;
+    background: white;
+    color: #334155;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    float: right;
+  }
+  .btn-back:hover {
+    background: #f1f5f9;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ═══ HERO ═══ */
+  .hero {
+    background: linear-gradient(135deg, var(--dark) 0%, #2c3e50 60%, #1a6fa3 100%);
+    padding: 60px 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #a8d8ea;
+    padding: 5px 18px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    color: white;
+    font-size: 2.8em;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: #5dade2; }
+  .hero p {
+    color: rgba(255,255,255,0.65);
+    font-size: 1.05em;
+    font-weight: 300;
+    max-width: 500px;
+    margin: 0 auto 35px;
+  }
+
+  /* ═══ FLOW OVERVIEW ═══ */
+  .flow-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .flow-step {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: white;
+    padding: 10px 20px;
+    font-size: 0.82em;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+  }
+  .flow-step:first-child { border-radius: 8px 0 0 8px; }
+  .flow-step:last-child { border-radius: 0 8px 8px 0; }
+  .flow-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255,255,255,0.4);
+    font-size: 0.9em;
+    z-index: 1;
+  }
+  .flow-step.active, .flow-step:hover {
+    background: var(--ocean-light);
+    border-color: var(--ocean-light);
+  }
+  .flow-step .num {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    font-size: 0.75em;
+    line-height: 20px;
+    text-align: center;
+    margin-right: 7px;
+  }
+
+  /* ═══ MAIN LAYOUT ═══ */
+  .main { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+
+  /* ═══ SECTION HEADERS ═══ */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .section-num {
+    width: 44px; height: 44px;
+    background: var(--dark);
+    color: white;
+    border-radius: 50%;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2em;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-text h2 { font-size: 1.5em; color: var(--dark); }
+  .section-text p { color: var(--gray); font-size: 0.9em; margin-top: 2px; }
+
+  /* ═══ TUTORIAL CARD ═══ */
+  .tutorial-section {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .tutorial-header {
+    padding: 24px 30px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(to right, #f8fbfe, white);
+  }
+
+  /* ═══ STEP-BY-STEP ═══ */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .step-item {
+    padding: 22px 28px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .step-item:hover { background: #fafcfe; }
+  .step-item:nth-child(even) { border-right: none; }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .step-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--ocean);
+    color: white;
+    font-size: 0.78em;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-dot.green { background: var(--success); }
+  .step-dot.gold { background: var(--gold); }
+  .step-dot.red { background: var(--danger); }
+  .step-title { font-weight: 600; font-size: 0.95em; color: var(--dark); }
+  .step-desc { color: #555; font-size: 0.875em; line-height: 1.6; }
+
+  /* ═══ MOCK UI SCREENS ═══ */
+  .screen-preview {
+    background: #f5f8fa;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 16px 28px 28px;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .screen-preview::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: var(--ocean);
+    color: white;
+    font-size: 0.7em;
+    font-weight: 600;
+    padding: 2px 12px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* Fake form fields */
+  .mock-form { max-width: 380px; }
+  .mock-label {
+    font-size: 0.78em;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .mock-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    font-size: 0.85em;
+    color: #999;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+  }
+  .mock-input.highlight {
+    border-color: var(--ocean);
+    box-shadow: 0 0 0 3px rgba(41,128,185,0.15);
+    color: var(--dark);
+  }
+
+  .mock-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    margin-right: 8px;
+    margin-top: 4px;
+  }
+  .mock-btn.primary { background: var(--ocean); color: white; }
+  .mock-btn.danger { background: var(--danger); color: white; }
+  .mock-btn.gray { background: #95a5a6; color: white; }
+  .mock-btn.success { background: var(--success); color: white; }
+
+  /* Progress bar mock */
+  .mock-progress {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+  }
+  .prog-step {
+    flex: 1;
+    text-align: center;
+    font-size: 0.7em;
+    font-weight: 700;
+    padding-bottom: 8px;
+    color: #bdc3c7;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+  }
+  .prog-step.active {
+    color: var(--ocean);
+    border-bottom-color: var(--ocean);
+  }
+
+  /* Table mock */
+  .mock-table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+  .mock-table th {
+    background: var(--ocean);
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+  }
+  .mock-table td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+  .mock-table tr:hover td { background: #fcfcfc; }
+  .room-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.78em;
+    background: white;
+    border: 1px solid var(--ocean);
+    color: var(--ocean);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .price-green { color: var(--success); font-weight: 700; }
+
+  /* Summary block */
+  .mock-summary {
+    background: #fff9e6;
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+  .summ-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 0;
+    font-size: 0.85em;
+    border-bottom: 1px dashed #eee;
+  }
+  .summ-row:last-child { border-bottom: none; font-size: 1em; font-weight: 700; border-top: 2px solid var(--gold); padding-top: 10px; }
+  .summ-label { color: var(--gray); }
+  .summ-val { font-weight: 600; color: var(--dark); }
+  .summ-final { color: var(--success); font-size: 1.1em; }
+
+  /* Alert banner */
+  .mock-alert {
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .mock-alert.success { background: #d4edda; color: #155724; border-left: 4px solid var(--success); }
+  .mock-alert.warning { background: #fff3cd; color: #856404; border-left: 4px solid var(--gold); }
+
+  /* Guest info block */
+  .mock-guest-info {
+    background: var(--ocean-pale);
+    border-left: 4px solid var(--ocean);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 0.85em;
+  }
+  .mock-guest-info strong { color: var(--dark); font-size: 0.95em; }
+  .mock-guest-info span { color: #555; }
+
+  /* ═══ TIP BOXES ═══ */
+  .tip {
+    display: flex;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    line-height: 1.6;
+    margin: 0 28px 24px;
+  }
+  .tip.info { background: #e8f4fd; border-left: 3px solid var(--ocean); }
+  .tip.warn { background: #fef9e7; border-left: 3px solid var(--gold); }
+  .tip.danger { background: #fdf2f2; border-left: 3px solid var(--danger); }
+  .tip-icon { font-size: 1.2em; flex-shrink: 0; margin-top: 1px; }
+  .tip strong { display: block; margin-bottom: 3px; color: var(--dark); }
+
+  /* ═══ DASHBOARD GRID MOCK ═══ */
+  .mock-dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .dash-card {
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .dash-card:hover { border-color: var(--ocean); transform: translateY(-2px); }
+  .dash-card.highlighted {
+    border-color: var(--ocean);
+    box-shadow: 0 0 0 3px rgba(41,128,185,0.15);
+  }
+  .dash-icon { font-size: 2em; margin-bottom: 8px; }
+  .dash-title { font-size: 0.82em; font-weight: 700; color: var(--dark); }
+  .dash-desc { font-size: 0.72em; color: var(--gray); margin-top: 3px; }
+
+  /* ═══ SECTION DIVIDER ═══ */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 40px 0 32px;
+  }
+  .section-divider hr { flex: 1; border: none; border-top: 1px solid var(--border); }
+  .section-divider span {
+    font-family: 'Playfair Display', serif;
+    color: var(--gray);
+    font-size: 0.85em;
+  }
+
+  /* ═══ MODAL MOCK ═══ */
+  .mock-modal-wrap { position: relative; }
+  .mock-modal {
+    background: white;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    max-width: 320px;
+    margin: 0 auto;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .modal-icon-big { font-size: 2.2em; margin-bottom: 10px; }
+  .modal-title { font-weight: 700; font-size: 1em; color: var(--dark); margin-bottom: 6px; }
+  .modal-msg { font-size: 0.82em; color: #666; margin-bottom: 18px; line-height: 1.5; }
+
+  /* ═══ RESPONSIVE ═══ */
+  @media (max-width: 640px) {
+    .steps-grid { grid-template-columns: 1fr; }
+    .step-item:nth-child(even) { border-right: 1px solid var(--border); }
+    .mock-dashboard { grid-template-columns: repeat(2, 1fr); }
+    .hero h1 { font-size: 1.9em; }
+    .flow-step { font-size: 0.72em; padding: 8px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ BACK BUTTON ══════════════════ -->
+<div style="padding: 12px 24px; background: white; border-bottom: 1px solid #e2e8f0;">
+  <a href="help.jsp" class="btn-back">
+    <span>←</span> Back to Help Center
+  </a>
+  <div style="clear:both;"></div>
+</div>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<div class="hero">
+  <div class="hero-badge">Staff Onboarding Guide</div>
+  <h1>Ocean View <span>Resort</span><br>System Tutorial</h1>
+  <p>A complete step-by-step guide for registering guests and creating room reservations.</p>
+  <div class="flow-bar">
+    <div class="flow-step active"><span class="num">1</span>Dashboard</div>
+    <div class="flow-step"><span class="num">2</span>Register Guest</div>
+    <div class="flow-step"><span class="num">3</span>Search Guest</div>
+    <div class="flow-step"><span class="num">4</span>Select Dates</div>
+    <div class="flow-step"><span class="num">5</span>Pick Rooms</div>
+    <div class="flow-step"><span class="num">6</span>Confirm</div>
+  </div>
+</div>
+
+<!-- ══════════════════ MAIN ══════════════════ -->
+<div class="main">
+
+  <!-- ═══ PART A: REGISTER GUEST ═══ -->
+  <div class="section-label">
+    <div class="section-num">A</div>
+    <div class="section-text">
+      <h2>Register a New Guest</h2>
+      <p>Add a first-time visitor to the system before making their booking.</p>
+    </div>
+  </div>
+
+  <!-- Step 1: Dashboard -->
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="section-label" style="margin-bottom:0">
+        <div class="step-dot" style="width:34px;height:34px;font-size:0.9em">1</div>
+        <div>
+          <strong style="font-size:1em">Open the Dashboard</strong>
+          <p style="color:var(--gray);font-size:0.85em;margin-top:2px">Log in and navigate to the main menu.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Dashboard Screen">
+      <div style="font-size:0.78em;font-weight:700;color:var(--gray);margin-bottom:12px;letter-spacing:1px;">STAFF ACCESS — Welcome, Staff!</div>
+      <div class="mock-dashboard">
+        <div class="dash-card highlighted">
+          <div class="dash-icon">👤</div>
+          <div class="dash-title">Register Guest</div>
+          <div class="dash-desc">Add a new client to the system.</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-icon">🔑</div>
+          <div class="dash-title">New Reservation</div>
+          <div class="dash-desc">Book for an existing guest.</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-icon">📋</div>
+          <div class="dash-title">Room Status</div>
+          <div class="dash-desc">Check live occupancy.</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-icon">🚪</div>
+          <div class="dash-title">Process Check-Out</div>
+          <div class="dash-desc">Release rooms.</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-icon">📅</div>
+          <div class="dash-title">View Bookings</div>
+          <div class="dash-desc">Filter all reservations.</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-icon">🍽️</div>
+          <div class="dash-title">Food Ordering</div>
+          <div class="dash-desc">Order meals for guests.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip info">
+      <div class="tip-icon">💡</div>
+      <div><strong>Action</strong> Click the <strong>👤 Register Guest</strong> card — it's highlighted above. This opens the guest registration form.</div>
+    </div>
+  </div>
+
+  <!-- Step 2: Fill the Form -->
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="section-label" style="margin-bottom:0">
+        <div class="step-dot" style="width:34px;height:34px;font-size:0.9em">2</div>
+        <div>
+          <strong style="font-size:1em">Fill in Guest Details</strong>
+          <p style="color:var(--gray);font-size:0.85em;margin-top:2px">Complete all required fields in the registration form.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Register New Guest">
+      <div class="mock-form">
+        <span class="mock-label">Full Name <span style="color:red">*</span></span>
+        <div class="mock-input highlight">John Silva</div>
+
+        <span class="mock-label">Home Address</span>
+        <div class="mock-input">No. 12, Galle Road, Colombo</div>
+
+        <span class="mock-label">NIC / Passport Number <span style="color:red">*</span></span>
+        <div class="mock-input highlight">199512345678</div>
+
+        <span class="mock-label">Phone Number</span>
+        <div class="mock-input">+94 77 123 4567</div>
+
+        <span class="mock-label">Email Address</span>
+        <div class="mock-input"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="553f3a3d3b15302d34382539307b363a38">[email&#160;protected]</a></div>
+
+        <div style="margin-top:8px;">
+          <button class="mock-btn danger">Cancel</button>
+          <button class="mock-btn primary">✔ Register Guest</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">1</div>
+          <div class="step-title">Full Name (Required)</div>
+        </div>
+        <div class="step-desc">Enter the guest's complete legal name as it appears on their ID.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">2</div>
+          <div class="step-title">NIC / Passport (Required)</div>
+        </div>
+        <div class="step-desc">This is the unique identifier used to look up the guest later during reservations. Double-check accuracy.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot green">3</div>
+          <div class="step-title">Phone & Email (Optional)</div>
+        </div>
+        <div class="step-desc">Provide contact details when available — useful for booking confirmations.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot green">4</div>
+          <div class="step-title">Click "Register Guest"</div>
+        </div>
+        <div class="step-desc">Submit the form. A success popup will confirm the guest was saved. You'll be returned to the dashboard.</div>
+      </div>
+    </div>
+
+    <div class="tip warn" style="margin-top:4px;">
+      <div class="tip-icon">⚠️</div>
+      <div><strong>Cancel Warning</strong> Clicking <em>Cancel</em> shows a confirmation popup asking if you want to discard the form. Click <strong>Go Back</strong> to continue, or <strong>Yes, Exit</strong> to abort.</div>
+    </div>
+  </div>
+
+  <div class="section-divider">
+    <hr><span>Part B — Making a Reservation</span><hr>
+  </div>
+
+  <!-- ═══ PART B: RESERVATION WIZARD ═══ -->
+  <div class="section-label">
+    <div class="section-num">B</div>
+    <div class="section-text">
+      <h2>Create a Room Reservation</h2>
+      <p>A 3-step wizard: select dates → pick rooms → confirm & save.</p>
+    </div>
+  </div>
+
+  <!-- Step 3: New Reservation -->
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="section-label" style="margin-bottom:0">
+        <div class="step-dot" style="width:34px;height:34px;font-size:0.9em">3</div>
+        <div>
+          <strong style="font-size:1em">Start a New Reservation</strong>
+          <p style="color:var(--gray);font-size:0.85em;margin-top:2px">Search for the guest using their NIC or Passport number.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Make Reservation — Search Guest">
+      <div style="text-align:center; margin-bottom:16px;">
+        <div style="font-size:2em;">🔍</div>
+        <div style="font-weight:700;font-size:1em;color:var(--dark);margin-bottom:4px;">Make Reservation</div>
+        <div style="font-size:0.8em;color:var(--gray);">Enter Guest NIC or Passport Number to begin</div>
+      </div>
+      <div class="mock-form" style="margin:0 auto;">
+        <div class="mock-input highlight">199512345678</div>
+        <div>
+          <button class="mock-btn gray">Back</button>
+          <button class="mock-btn primary">Search Guest →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">1</div>
+          <div class="step-title">Go to "New Reservation"</div>
+        </div>
+        <div class="step-desc">On the dashboard, click the 🔑 <strong>New Reservation</strong> card.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">2</div>
+          <div class="step-title">Enter NIC / Passport</div>
+        </div>
+        <div class="step-desc">Type the guest's NIC or passport number exactly as registered. Then click <strong>Search Guest</strong>.</div>
+      </div>
+    </div>
+
+    <div class="tip warn">
+      <div class="tip-icon">⚠️</div>
+      <div><strong>Guest Not Found?</strong> If the NIC doesn't match any record, a popup appears offering to register the guest. Click <strong>Register New Guest</strong> to go back to Part A, then start the reservation again.</div>
+    </div>
+  </div>
+
+  <!-- Step 4: Select Dates — Wizard Step 1 -->
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="section-label" style="margin-bottom:0">
+        <div class="step-dot gold" style="width:34px;height:34px;font-size:0.9em">4</div>
+        <div>
+          <strong style="font-size:1em">Step 1 of 3 — Select Stay Dates</strong>
+          <p style="color:var(--gray);font-size:0.85em;margin-top:2px">Choose check-in and check-out dates for the reservation.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Wizard: Step 1 — Select Dates">
+      <div class="mock-progress">
+        <div class="prog-step active">1. SELECT DATES</div>
+        <div class="prog-step">2. PICK ROOMS</div>
+        <div class="prog-step">3. CONFIRM</div>
+      </div>
+      <div class="mock-guest-info">
+        <strong>Guest: John Silva</strong><br>
+        <span>NIC / Passport: <b style="color:var(--ocean)">199512345678</b></span>
+      </div>
+      <div style="text-align:center;font-weight:700;color:var(--dark);margin-bottom:16px;">Stay Duration</div>
+      <div class="mock-form" style="margin:0 auto;">
+        <span class="mock-label">Check-in Date</span>
+        <div class="mock-input highlight">2025-08-10</div>
+        <span class="mock-label">Check-out Date</span>
+        <div class="mock-input highlight">2025-08-15</div>
+        <div style="margin-top:4px;">
+          <button class="mock-btn gray">Back</button>
+          <button class="mock-btn danger">Cancel</button>
+          <button class="mock-btn primary">Check Availability →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">1</div>
+          <div class="step-title">Verify Guest Info</div>
+        </div>
+        <div class="step-desc">Confirm the guest's name and NIC shown at the top of the form before proceeding.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">2</div>
+          <div class="step-title">Set Check-in Date</div>
+        </div>
+        <div class="step-desc">Select today or a future date. Past dates are automatically blocked by the calendar.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">3</div>
+          <div class="step-title">Set Check-out Date</div>
+        </div>
+        <div class="step-desc">Must be after the check-in date. The calendar will prevent selecting an earlier date.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot green">4</div>
+          <div class="step-title">Check Availability</div>
+        </div>
+        <div class="step-desc">Click the blue button to see which rooms are free for the selected period.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5: Pick Rooms — Wizard Step 2 -->
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="section-label" style="margin-bottom:0">
+        <div class="step-dot gold" style="width:34px;height:34px;font-size:0.9em">5</div>
+        <div>
+          <strong style="font-size:1em">Step 2 of 3 — Pick Rooms</strong>
+          <p style="color:var(--gray);font-size:0.85em;margin-top:2px">Select one or more available rooms for the guest.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Wizard: Step 2 — Available Rooms">
+      <div class="mock-progress">
+        <div class="prog-step">1. SELECT DATES</div>
+        <div class="prog-step active">2. PICK ROOMS</div>
+        <div class="prog-step">3. CONFIRMATION</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;background:var(--ocean-pale);padding:12px 16px;border-radius:8px;border-left:4px solid var(--ocean);">
+        <div>
+          <div style="font-weight:700;font-size:0.9em;">Booking for: John Silva</div>
+          <div style="font-size:0.78em;color:#555;">NIC: <b>199512345678</b></div>
+        </div>
+        <div style="color:var(--ocean);font-weight:700;font-size:0.85em;">Aug 10 → Aug 15</div>
+      </div>
+      <div style="font-size:0.82em;color:var(--gray);margin-bottom:10px;">Select the rooms the guest wishes to reserve.</div>
+      <table class="mock-table">
+        <thead>
+          <tr><th style="width:60px">Select</th><th>Room No.</th><th>Type</th><th>Price / Night</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align:center;"><input type="checkbox" checked style="width:16px;height:16px;" disabled></td>
+            <td><strong>101</strong></td>
+            <td><span class="room-badge">Deluxe</span></td>
+            <td class="price-green">Rs. 8,500</td>
+          </tr>
+          <tr>
+            <td style="text-align:center;"><input type="checkbox" style="width:16px;height:16px;" disabled></td>
+            <td><strong>205</strong></td>
+            <td><span class="room-badge">Standard</span></td>
+            <td class="price-green">Rs. 5,200</td>
+          </tr>
+          <tr>
+            <td style="text-align:center;"><input type="checkbox" style="width:16px;height:16px;" disabled></td>
+            <td><strong>302</strong></td>
+            <td><span class="room-badge">Suite</span></td>
+            <td class="price-green">Rs. 14,000</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:16px;">
+        <button class="mock-btn gray">Back</button>
+        <button class="mock-btn danger">Cancel</button>
+        <button class="mock-btn primary">Calculate Bill →</button>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">1</div>
+          <div class="step-title">Review Available Rooms</div>
+        </div>
+        <div class="step-desc">The table shows only rooms available for the chosen dates — room number, type (Standard / Deluxe / Suite), and nightly rate.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">2</div>
+          <div class="step-title">Tick Room Checkboxes</div>
+        </div>
+        <div class="step-desc">Check one or more rooms. Multiple rooms can be selected for the same guest and stay period.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot green">3</div>
+          <div class="step-title">Click "Calculate Bill"</div>
+        </div>
+        <div class="step-desc">Proceeds to the billing summary. If no rooms are selected, a warning popup will block you from continuing.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot red">4</div>
+          <div class="step-title">No Rooms Available?</div>
+        </div>
+        <div class="step-desc">If all rooms are booked for those dates, a message will appear. Click <strong>Back</strong> and choose different dates.</div>
+      </div>
+    </div>
+
+    <div class="tip info">
+      <div class="tip-icon">💡</div>
+      <div><strong>Discount Info</strong> The system automatically applies discounts — a long-stay discount for stays of 5+ nights and a multi-room discount when 2+ rooms are selected. You'll see these reflected in the next step.</div>
+    </div>
+  </div>
+
+  <!-- Step 6: Confirm Booking — Wizard Step 3 -->
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="section-label" style="margin-bottom:0">
+        <div class="step-dot green" style="width:34px;height:34px;font-size:0.9em">6</div>
+        <div>
+          <strong style="font-size:1em">Step 3 of 3 — Review & Confirm</strong>
+          <p style="color:var(--gray);font-size:0.85em;margin-top:2px">Final review before saving the reservation to the system.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Wizard: Step 3 — Final Review">
+      <div class="mock-progress" style="margin-bottom:20px;">
+        <div class="prog-step">1. DATES</div>
+        <div class="prog-step">2. ROOMS</div>
+        <div class="prog-step active">3. CONFIRM</div>
+      </div>
+      <div style="text-align:center;font-weight:700;color:var(--dark);margin-bottom:16px;font-size:1em;">Final Review</div>
+
+      <!-- Guest summary card -->
+      <div style="border:1px solid #e0e0e0;border-radius:10px;overflow:hidden;margin-bottom:16px;">
+        <div style="background:var(--dark);color:white;padding:12px 16px;font-weight:700;font-size:0.85em;display:flex;justify-content:space-between;">
+          <span>Guest Information</span><span>NIC: 199512345678</span>
+        </div>
+        <div style="padding:14px 16px;">
+          <div class="summ-row"><span class="summ-label">Guest Name</span><span class="summ-val">John Silva</span></div>
+          <div class="summ-row"><span class="summ-label">Check-in</span><span class="summ-val">2025-08-10</span></div>
+          <div class="summ-row"><span class="summ-label">Check-out</span><span class="summ-val">2025-08-15</span></div>
+          <div class="summ-row" style="border:none"><span class="summ-label">Booking Details</span><span class="summ-val">5 Night(s) / 1 Room(s)</span></div>
+        </div>
+      </div>
+
+      <!-- Bill -->
+      <div class="mock-summary">
+        <div class="summ-row"><span class="summ-label">Base Total</span><span class="summ-val">Rs. 42,500</span></div>
+        <div class="summ-row"><span class="summ-label">Discount (10%) <span style="background:var(--gold);color:var(--dark);padding:1px 8px;border-radius:4px;font-size:0.75em;margin-left:4px;">Long Stay</span></span><span class="summ-val" style="color:var(--danger)">- Rs. 4,250</span></div>
+        <div class="summ-row"><span>Final Payable</span><span class="summ-final">Rs. 38,250</span></div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <button class="mock-btn gray">Back</button>
+        <button class="mock-btn danger">Cancel</button>
+        <button class="mock-btn success">✓ Confirm & Save Booking</button>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">1</div>
+          <div class="step-title">Verify All Details</div>
+        </div>
+        <div class="step-desc">Check guest name, NIC, check-in/out dates, number of nights, and number of rooms before confirming.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">2</div>
+          <div class="step-title">Check the Bill Breakdown</div>
+        </div>
+        <div class="step-desc">Review the base total, any applied discounts (long-stay or multi-room), and the final payable amount.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot green">3</div>
+          <div class="step-title">Confirm & Save</div>
+        </div>
+        <div class="step-desc">Click the green <strong>Confirm & Save Booking</strong> button. The reservation is saved and you return to the dashboard.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot red">4</div>
+          <div class="step-title">Cancel Booking</div>
+        </div>
+        <div class="step-desc">Clicking <em>Cancel</em> shows a "Discard Reservation?" popup. Confirm to return to dashboard — all progress will be lost.</div>
+      </div>
+    </div>
+
+    <!-- Success alert -->
+    <div style="padding: 0 28px 4px;">
+      <div class="mock-alert success">✔ Reservation successfully confirmed and rooms assigned.</div>
+    </div>
+
+    <div class="tip info" style="margin-top:0">
+      <div class="tip-icon">✅</div>
+      <div><strong>Booking Complete!</strong> After saving, you'll be redirected to the dashboard and a green success banner confirms the booking was processed. The reserved rooms are now marked as occupied for those dates.</div>
+    </div>
+  </div>
+
+  <!-- ═══ QUICK REFERENCE ═══ -->
+  <div class="section-divider">
+    <hr><span>Quick Reference</span><hr>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <strong>Common Scenarios & What To Do</strong>
+    </div>
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">?</div>
+          <div class="step-title">Guest has no prior record</div>
+        </div>
+        <div class="step-desc">Register first via <strong>👤 Register Guest</strong>, then return to dashboard and use <strong>🔑 New Reservation</strong> to book.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">?</div>
+          <div class="step-title">Returning guest wants to book</div>
+        </div>
+        <div class="step-desc">Skip registration. Go directly to <strong>🔑 New Reservation</strong>, search by NIC, and proceed through the 3-step wizard.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">?</div>
+          <div class="step-title">No rooms available for dates</div>
+        </div>
+        <div class="step-desc">Go back to Step 1 of the wizard and choose different check-in / check-out dates. Use <strong>📋 Room Status</strong> to plan ahead.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header">
+          <div class="step-dot">?</div>
+          <div class="step-title">Need to view all bookings</div>
+        </div>
+        <div class="step-desc">Click <strong>📅 View Bookings</strong> from the dashboard to see and filter the complete reservation list.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:30px 0 20px;color:var(--gray);font-size:0.82em;">
+    Ocean View Resort — Staff System Tutorial &nbsp;·&nbsp; For assistance, visit th

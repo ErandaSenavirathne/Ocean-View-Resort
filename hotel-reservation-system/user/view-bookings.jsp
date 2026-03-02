@@ -43,7 +43,26 @@
         .btn { padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; border: none; transition: 0.2s; text-align: center; }
         .btn-filter { background: var(--primary); color: white; }
         .btn-reset { background: #ecf0f1; color: #7f8c8d; border: 1px solid #ccc; }
-        .btn-dash { background: white; border: 1px solid var(--primary); color: var(--primary); }
+        .btn-back {
+            text-decoration: none;
+            background: white;
+            color: #334155;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            display: inline-flex; 
+            align-items: center;
+            gap: 8px;
+            float: right; /* Moves it to the right corner */
+        }
+
+        .btn-back:hover {
+            background: #f1f5f9;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
 
         .stats-container { display: flex; gap: 20px; margin-bottom: 25px; }
         .stat-card { background: white; border: 1px solid #eee; padding: 15px 20px; border-radius: 8px; flex: 1; border-top: 4px solid var(--primary); }
@@ -69,9 +88,9 @@
 <div class="container">
     <div class="filter-header">
         <h2 style="margin:0; color: var(--dark);">Reservations Registry</h2>
-        <button type="button" class="btn btn-dash" onclick="location.href='${pageContext.request.contextPath}/user/user-dashboard.jsp'">
-            ← Dashboard
-        </button>
+        <a href="${pageContext.request.contextPath}/user/user-dashboard.jsp" class="btn-back">
+            <span>←</span> Back to Dashboard
+        </a>
     </div>
 
     <form action="${pageContext.request.contextPath}/ViewBookingsServlet" method="get" class="filter-form">

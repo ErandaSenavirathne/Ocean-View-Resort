@@ -1,0 +1,865 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check-Out Tutorial — Ocean View Resort</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ocean: #2980b9;
+    --ocean-pale: #ebf5fb;
+    --dark: #2c3e50;
+    --success: #27ae60;
+    --danger: #c0392b;
+    --gold: #f1c40f;
+    --orange: #e67e22;
+    --gray: #7f8c8d;
+    --border: #e8eef2;
+    --bg: #f4f7f6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ═══ BACK BAR ═══ */
+  .back-bar {
+    padding: 12px 28px; background: white;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .back-bar-brand { font-size: 0.8em; font-weight: 700; color: var(--gray); letter-spacing: 1px; text-transform: uppercase; }
+  .btn-back {
+    text-decoration: none; background: white; color: #334155;
+    padding: 8px 15px; border-radius: 8px; font-weight: 600;
+    font-size: 0.85rem; border: 1px solid var(--border);
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-back:hover { background: #f1f5f9; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+
+  /* ═══ HERO ═══ */
+  .hero {
+    background: linear-gradient(135deg, #1a2a3a 0%, var(--dark) 50%, #1a7a4a 100%);
+    padding: 52px 40px 44px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-badge {
+    display: inline-block; background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2); color: #a8e6c1;
+    padding: 5px 18px; border-radius: 20px; font-size: 0.75em;
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 18px;
+  }
+  .hero h1 { font-family: 'Playfair Display', serif; color: white; font-size: 2.6em; line-height: 1.15; margin-bottom: 10px; }
+  .hero h1 span { color: #55efc4; }
+  .hero p { color: rgba(255,255,255,0.6); font-size: 1em; font-weight: 300; max-width: 480px; margin: 0 auto 32px; }
+
+  /* ═══ FLOW BAR ═══ */
+  .flow-bar { display: flex; justify-content: center; flex-wrap: wrap; gap: 0; }
+  .flow-step {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    color: white; padding: 9px 16px; font-size: 0.78em; font-weight: 600; position: relative;
+  }
+  .flow-step:first-child { border-radius: 8px 0 0 8px; }
+  .flow-step:last-child  { border-radius: 0 8px 8px 0; }
+  .flow-step:not(:last-child)::after {
+    content: '→'; position: absolute; right: -10px; top: 50%;
+    transform: translateY(-50%); color: rgba(255,255,255,0.35); font-size: 0.85em; z-index: 1;
+  }
+  .flow-step.active { background: var(--success); border-color: var(--success); }
+  .flow-step .num {
+    display: inline-block; width: 18px; height: 18px; background: rgba(255,255,255,0.2);
+    border-radius: 50%; font-size: 0.72em; line-height: 18px; text-align: center; margin-right: 5px;
+  }
+
+  /* ═══ MAIN ═══ */
+  .main { max-width: 1060px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  /* ═══ SECTION LABEL ═══ */
+  .section-label { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+  .section-num {
+    width: 42px; height: 42px; background: var(--dark); color: white;
+    border-radius: 50%; font-family: 'Playfair Display', serif;
+    font-size: 1.15em; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .section-text h2 { font-size: 1.4em; }
+  .section-text p  { color: var(--gray); font-size: 0.88em; margin-top: 2px; }
+
+  /* ═══ CARD ═══ */
+  .tutorial-section {
+    background: white; border-radius: 16px; border: 1px solid var(--border);
+    overflow: hidden; margin-bottom: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .tutorial-header {
+    padding: 22px 28px; border-bottom: 1px solid var(--border);
+    background: linear-gradient(to right, #f0faf5, white);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .step-dot {
+    width: 32px; height: 32px; border-radius: 50%; background: var(--success);
+    color: white; font-size: 0.85em; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .step-dot.ocean  { background: var(--ocean); }
+  .step-dot.orange { background: var(--orange); }
+  .step-dot.dark   { background: var(--dark); }
+  .step-dot.danger { background: var(--danger); }
+
+  /* ═══ STEPS GRID ═══ */
+  .steps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .step-item {
+    padding: 20px 26px; border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border); transition: background 0.2s;
+  }
+  .step-item:hover { background: #f0faf5; }
+  .step-item:nth-child(even) { border-right: none; }
+  .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .step-num {
+    width: 26px; height: 26px; border-radius: 50%; background: var(--success);
+    color: white; font-size: 0.75em; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .step-num.ocean  { background: var(--ocean); }
+  .step-num.orange { background: var(--orange); }
+  .step-num.dark   { background: var(--dark); }
+  .step-num.danger { background: var(--danger); }
+  .step-title { font-weight: 600; font-size: 0.92em; color: var(--dark); }
+  .step-desc  { color: #555; font-size: 0.855em; line-height: 1.6; }
+
+  /* ═══ SCREEN PREVIEW ═══ */
+  .screen-preview {
+    background: #fafafa; border-radius: 12px; padding: 22px;
+    margin: 6px 26px 22px; border: 1px solid var(--border); position: relative;
+  }
+  .screen-preview::before {
+    content: attr(data-label); position: absolute; top: -10px; left: 14px;
+    background: var(--success); color: white; font-size: 0.68em; font-weight: 700;
+    padding: 2px 12px; border-radius: 10px; letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .screen-preview.ocean-label::before { background: var(--ocean); }
+  .screen-preview.dark-label::before  { background: var(--dark); }
+  .screen-preview.gold-label::before  { background: #d4a017; }
+
+  /* ═══ MOCK SEARCH BOX ═══ */
+  .mock-search-wrap {
+    background: white; padding: 36px 40px; border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08); max-width: 380px;
+    margin: 0 auto; text-align: center;
+  }
+  .mock-search-icon { font-size: 2.6em; margin-bottom: 8px; }
+  .mock-search-title { font-weight: 700; font-size: 1em; color: var(--dark); margin-bottom: 4px; }
+  .mock-search-sub   { font-size: 0.78em; color: var(--gray); margin-bottom: 18px; }
+  .mock-input {
+    width: 100%; padding: 11px 14px; border: 1px solid #ddd;
+    border-radius: 8px; font-size: 0.85em; color: var(--dark);
+    background: white; margin-bottom: 14px; text-align: left;
+  }
+  .mock-input.active { border-color: var(--ocean); box-shadow: 0 0 0 3px rgba(41,128,185,0.12); }
+  .mock-btn-row { display: flex; gap: 8px; }
+  .mock-btn {
+    padding: 11px 16px; border-radius: 8px; font-size: 0.82em;
+    font-weight: 700; border: none; cursor: pointer; flex: 1;
+  }
+  .mock-btn.gray    { background: #95a5a6; color: white; flex: 0.7; }
+  .mock-btn.gold    { background: #f39c12; color: white; flex: 1.5; }
+  .mock-btn.success { background: var(--success); color: white; }
+  .mock-btn.ocean   { background: var(--ocean);   color: white; }
+  .mock-btn.dark    { background: var(--dark);     color: white; }
+  .mock-btn.outline { background: white; color: var(--dark); border: 1px solid #ddd; }
+  .mock-btn.danger  { background: var(--danger);   color: white; }
+
+  /* error msg */
+  .mock-error {
+    background: #f8d7da; color: #721c24; padding: 10px 14px;
+    border-radius: 6px; font-size: 0.8em; margin-top: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  /* ═══ MOCK BILL PAGE ═══ */
+  .mock-container {
+    background: white; border-radius: 12px; padding: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07); max-width: 680px; margin: 0 auto;
+  }
+  .mock-page-header {
+    border-bottom: 2px solid var(--ocean); padding-bottom: 12px; margin-bottom: 20px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .mock-page-title { font-weight: 700; font-size: 1em; color: var(--dark); }
+  .mock-res-badge {
+    background: var(--dark); color: white; padding: 4px 12px;
+    border-radius: 5px; font-size: 0.78em; font-weight: 700;
+  }
+  .detail-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;
+  }
+  .detail-item {
+    padding: 12px 14px; background: #f9f9f9; border-radius: 8px;
+    border-left: 4px solid #ddd;
+  }
+  .detail-label { font-size: 0.68em; color: var(--gray); text-transform: uppercase; font-weight: 700; }
+  .detail-value { font-size: 0.92em; color: var(--dark); font-weight: 600; margin-top: 3px; }
+  .early-badge {
+    background: var(--danger); color: white; padding: 2px 8px;
+    border-radius: 4px; font-size: 0.65em; margin-left: 6px;
+  }
+
+  /* bill card */
+  .mock-bill-card {
+    background: #fff9e6; border: 1px solid var(--gold);
+    padding: 20px; border-radius: 10px; margin-bottom: 18px;
+  }
+  .bill-row {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 8px; font-size: 0.85em;
+  }
+  .bill-row:last-child { margin-bottom: 0; }
+  .bill-label { color: var(--gray); font-weight: 500; font-size: 0.82em; text-transform: uppercase; }
+  .bill-value { font-weight: 600; color: var(--dark); }
+  .bill-divider { border: none; border-top: 1px dashed var(--gold); margin: 10px 0; }
+  .bill-total-row {
+    display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px;
+  }
+  .bill-total-label { font-size: 0.9em; color: black; font-weight: 600; }
+  .bill-total-amount { font-size: 1.6em; font-weight: 800; color: var(--dark); }
+
+  /* payment method */
+  .method-selector { display: flex; gap: 10px; margin: 16px 0; }
+  .method-btn {
+    flex: 1; padding: 13px; border: 2px solid #ddd; border-radius: 8px;
+    text-align: center; cursor: pointer; font-weight: 700; font-size: 0.82em;
+    transition: 0.2s; color: var(--gray);
+  }
+  .method-btn.active { border-color: var(--ocean); background: var(--ocean-pale); color: var(--ocean); }
+
+  /* ═══ MOCK CARD PAYMENT ═══ */
+  .mock-card-form {
+    background: white; border-radius: 14px; padding: 28px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1); max-width: 380px; margin: 0 auto;
+    text-align: center;
+  }
+  .card-form-title { font-weight: 700; font-size: 1em; color: var(--dark); margin-bottom: 4px; }
+  .card-amount { font-size: 0.82em; color: #666; margin-bottom: 20px; }
+  .card-input-group { text-align: left; margin-bottom: 12px; }
+  .card-label { font-size: 0.7em; font-weight: 700; color: var(--gray); text-transform: uppercase; }
+  .card-input {
+    width: 100%; padding: 10px 12px; margin-top: 4px; border: 1px solid #ddd;
+    border-radius: 8px; font-size: 0.83em; background: white; color: var(--dark); box-sizing: border-box;
+  }
+  .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* ═══ MOCK RECEIPT ═══ */
+  .mock-receipt {
+    background: white; width: 100%; max-width: 340px; margin: 0 auto;
+    padding: 22px; border: 1px solid #ddd; border-radius: 6px;
+    font-family: 'Courier New', monospace; font-size: 0.78em;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+  .receipt-header { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 12px; }
+  .receipt-header h3 { font-size: 1em; margin-bottom: 4px; }
+  .receipt-header p  { font-size: 0.78em; color: #555; margin: 2px 0; }
+  .receipt-row { display: flex; justify-content: space-between; margin: 5px 0; }
+  .receipt-section { font-weight: 700; font-size: 0.75em; text-transform: uppercase; border-bottom: 1px solid #eee; margin: 8px 0 4px; padding-bottom: 3px; }
+  .receipt-item-row { display: flex; justify-content: space-between; color: #333; margin: 3px 0; }
+  .receipt-total { border-top: 2px solid #000; margin-top: 12px; padding-top: 8px; font-weight: 700; font-size: 1.05em; display: flex; justify-content: space-between; }
+  .receipt-footer { text-align: center; border-top: 1px dashed #ccc; margin-top: 12px; padding-top: 10px; font-size: 0.72em; color: #555; }
+
+  /* ═══ TIPS ═══ */
+  .tip {
+    display: flex; gap: 12px; padding: 13px 16px; border-radius: 8px;
+    font-size: 0.845em; line-height: 1.6; margin: 0 26px 20px;
+  }
+  .tip.info   { background: var(--ocean-pale); border-left: 3px solid var(--ocean); }
+  .tip.ok     { background: #eafaf1;           border-left: 3px solid var(--success); }
+  .tip.warn   { background: #fef9e7;           border-left: 3px solid var(--gold); }
+  .tip.danger { background: #fdf2f2;           border-left: 3px solid var(--danger); }
+  .tip-icon { font-size: 1.1em; flex-shrink: 0; }
+  .tip strong { display: block; margin-bottom: 2px; color: var(--dark); }
+
+  /* ═══ CARD SUCCESS STATE ═══ */
+  .mock-card-success {
+    background: white; border-radius: 14px; padding: 28px 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1); max-width: 340px; margin: 0 auto; text-align: center;
+  }
+
+  /* ═══ DIVIDER ═══ */
+  .section-divider { display: flex; align-items: center; gap: 16px; margin: 36px 0 28px; }
+  .section-divider hr { flex: 1; border: none; border-top: 1px solid var(--border); }
+  .section-divider span { font-family: 'Playfair Display', serif; color: var(--gray); font-size: 0.85em; }
+
+  @media (max-width: 640px) {
+    .steps-grid { grid-template-columns: 1fr; }
+    .step-item:nth-child(even) { border-right: 1px solid var(--border); }
+    .detail-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 1.85em; }
+    .flow-step { font-size: 0.7em; padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ BACK BAR ══ -->
+<div class="back-bar">
+  <div class="back-bar-brand">🚪 Check-Out Tutorial</div>
+  <a href="help.jsp" class="btn-back"><span>←</span> Back to Help Center</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-badge">Staff Tutorial — Check-Out</div>
+  <h1>Process <span>Check-Out</span><br>& Payment Guide</h1>
+  <p>How to find a reservation, review the final bill, collect payment, and print the receipt.</p>
+  <div class="flow-bar">
+    <div class="flow-step active"><span class="num">1</span>Open Screen</div>
+    <div class="flow-step"><span class="num">2</span>Search Guest</div>
+    <div class="flow-step"><span class="num">3</span>Review Bill</div>
+    <div class="flow-step"><span class="num">4</span>Choose Payment</div>
+    <div class="flow-step"><span class="num">5</span>Cash Checkout</div>
+    <div class="flow-step"><span class="num">6</span>Card Payment</div>
+    <div class="flow-step"><span class="num">7</span>Print Receipt</div>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+  <!-- ═══════════════════════════ -->
+  <!-- STEP 1: Open Screen        -->
+  <!-- ═══════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">1</div>
+    <div class="section-text">
+      <h2>Open the Check-Out Screen</h2>
+      <p>Navigate to the check-out module from the main dashboard.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot dark">1</div>
+      <div>
+        <strong style="font-size:0.97em;">Click "Process Check-Out" on the Dashboard</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">The 🚪 card opens the guest search page.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview ocean-label" data-label="Dashboard — Select Process Check-Out">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:520px;margin:0 auto;">
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;"><div style="font-size:1.8em;margin-bottom:6px;">👤</div><div style="font-weight:700;">Register Guest</div></div>
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;"><div style="font-size:1.8em;margin-bottom:6px;">🔑</div><div style="font-weight:700;">New Reservation</div></div>
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;"><div style="font-size:1.8em;margin-bottom:6px;">📋</div><div style="font-weight:700;">Room Status</div></div>
+        <!-- Highlighted -->
+        <div style="background:linear-gradient(135deg,#f0fff8,#e8fdf2);border:2px solid var(--success);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;box-shadow:0 0 0 3px rgba(39,174,96,0.15);">
+          <div style="font-size:1.8em;margin-bottom:6px;">🚪</div>
+          <div style="font-weight:700;color:var(--success);">Process Check-Out</div>
+          <div style="font-size:0.72em;color:var(--gray);margin-top:2px;">← Click this</div>
+        </div>
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;"><div style="font-size:1.8em;margin-bottom:6px;">📅</div><div style="font-weight:700;">View Bookings</div></div>
+        <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px;text-align:center;font-size:0.8em;"><div style="font-size:1.8em;margin-bottom:6px;">🍽️</div><div style="font-weight:700;">Food Ordering</div></div>
+      </div>
+    </div>
+
+    <div class="tip info">
+      <div class="tip-icon">💡</div>
+      <div><strong>Action</strong> Click the <strong>🚪 Process Check-Out</strong> card. This opens the guest search page where you'll find the reservation by the guest's NIC.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ -->
+  <!-- STEP 2: Search Guest       -->
+  <!-- ═══════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">2</div>
+    <div class="section-text">
+      <h2>Search for the Guest's Reservation</h2>
+      <p>Enter the guest's NIC or Passport number to load their active booking.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot ocean">2</div>
+      <div>
+        <strong style="font-size:0.97em;">Check-Out Search Screen</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">Enter NIC and click Find Reservation.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview ocean-label" data-label="Check-Out Search Screen">
+      <div class="mock-search-wrap">
+        <div class="mock-search-icon">🚪</div>
+        <div class="mock-search-title">Process Check-Out</div>
+        <div class="mock-search-sub">Search for an active reservation by Guest NIC</div>
+        <div class="mock-input active">199512345678</div>
+        <div class="mock-btn-row">
+          <button class="mock-btn gray">Back</button>
+          <button class="mock-btn gold">Find Reservation</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header"><div class="step-num ocean">1</div><div class="step-title">Enter the Guest's NIC</div></div>
+        <div class="step-desc">Type the guest's NIC or Passport number exactly as registered in the system. The field auto-focuses so you can type immediately.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num ocean">2</div><div class="step-title">Click "Find Reservation"</div></div>
+        <div class="step-desc">The system searches for an <strong>active booking</strong> (status: BOOKED) matching that NIC. If found, you'll be taken to the bill review screen.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num danger">3</div><div class="step-title">Guest Not Found Error</div></div>
+        <div class="step-desc">If no active reservation is found, a red error message appears below the form. Double-check the NIC spelling and try again.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num dark">4</div><div class="step-title">Click "Back" to Cancel</div></div>
+        <div class="step-desc">Clicking <strong>Back</strong> returns you to the main dashboard without processing anything.</div>
+      </div>
+    </div>
+
+    <!-- Error state -->
+    <div class="screen-preview ocean-label" data-label="Error — Guest Not Found">
+      <div class="mock-search-wrap">
+        <div class="mock-search-icon">🚪</div>
+        <div class="mock-search-title">Process Check-Out</div>
+        <div class="mock-search-sub">Search for an active reservation by Guest NIC</div>
+        <div class="mock-input" style="border-color:var(--danger);color:#721c24;">199599999999</div>
+        <div class="mock-btn-row">
+          <button class="mock-btn gray">Back</button>
+          <button class="mock-btn gold">Find Reservation</button>
+        </div>
+        <div class="mock-error">⚠️ No active reservation found for this NIC. Please check and try again.</div>
+      </div>
+    </div>
+
+    <div class="tip warn">
+      <div class="tip-icon">⚠️</div>
+      <div><strong>Only BOOKED reservations appear.</strong> If the guest's booking is already PAID or CANCELLED it won't show up here. Check <strong>📅 View Bookings</strong> to verify the status if you're unsure.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ -->
+  <!-- STEP 3: Review Final Bill  -->
+  <!-- ═══════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">3</div>
+    <div class="section-text">
+      <h2>Review the Final Bill</h2>
+      <p>Verify guest details, nights stayed, room charges, food charges, and the total payable.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot">3</div>
+      <div>
+        <strong style="font-size:0.97em;">Finalize Check-Out Screen</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">All charges are calculated automatically — verify before confirming.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Review Final Bill Screen">
+      <div class="mock-container">
+        <div class="mock-page-header">
+          <div class="mock-page-title">Review Final Bill</div>
+          <div class="mock-res-badge">ID: #1042</div>
+        </div>
+
+        <div class="detail-grid">
+          <div class="detail-item">
+            <div class="detail-label">Guest Name</div>
+            <div class="detail-value">John Silva</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">NIC</div>
+            <div class="detail-value">199512345678</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Scheduled Stay</div>
+            <div class="detail-value">2025-08-10 to 2025-08-15</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Nights Stayed</div>
+            <div class="detail-value">5</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Rooms</div>
+            <div class="detail-value">101</div>
+          </div>
+        </div>
+
+        <div class="mock-bill-card">
+          <div class="bill-row">
+            <span class="bill-label">Room Charges</span>
+            <span class="bill-value">Rs. 42,500</span>
+          </div>
+          <hr class="bill-divider">
+          <div class="bill-row">
+            <span class="bill-label">Food &amp; Service</span>
+            <span class="bill-value">Rs. 1,350</span>
+          </div>
+          <div class="bill-total-row">
+            <span class="bill-total-label">Total Payable</span>
+            <span class="bill-total-amount">Rs. 43,850</span>
+          </div>
+        </div>
+
+        <div class="method-selector">
+          <div class="method-btn active">💵 Cash Payment</div>
+          <div class="method-btn">💳 Card Payment</div>
+        </div>
+
+        <button class="mock-btn success" style="width:100%;padding:14px;font-size:0.9em;">Confirm &amp; Finalize</button>
+        <div style="text-align:center;margin-top:10px;font-size:0.8em;color:var(--gray);">Back</div>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header"><div class="step-num ocean">1</div><div class="step-title">Verify Guest Details</div></div>
+        <div class="step-desc">Check the guest name, NIC, scheduled check-in/out dates, number of nights stayed, and room number(s) are all correct.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num ocean">2</div><div class="step-title">Check the EARLY Badge</div></div>
+        <div class="step-desc">If the guest is checking out before their scheduled date, a red <strong>EARLY</strong> badge appears next to Nights Stayed. The bill is adjusted to actual nights only.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num">3</div><div class="step-title">Review Room Charges</div></div>
+        <div class="step-desc">Room charges = nightly rate × actual nights stayed. This is pre-calculated automatically based on the booking and current date.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num">4</div><div class="step-title">Review Food &amp; Service</div></div>
+        <div class="step-desc">All food orders placed via the Food Ordering system during the stay are summed here automatically. Rs. 0.00 means no food was ordered.</div>
+      </div>
+    </div>
+
+    <!-- Early checkout callout -->
+    <div class="screen-preview" data-label="Early Check-Out Example" style="margin-top:0;">
+      <div style="max-width:420px;margin:0 auto;">
+        <div class="detail-item" style="border-left-color:var(--danger);">
+          <div class="detail-label">Nights Stayed</div>
+          <div class="detail-value">3 <span class="early-badge">EARLY</span></div>
+        </div>
+        <div style="font-size:0.8em;color:#555;margin-top:10px;line-height:1.6;">
+          The guest booked for 5 nights (Aug 10–15) but is checking out after 3 nights (Aug 13). 
+          The system charges for <strong>3 nights only</strong> — the bill is adjusted down automatically.
+        </div>
+      </div>
+    </div>
+
+    <div class="tip warn">
+      <div class="tip-icon">⚠️</div>
+      <div><strong>Always confirm the total with the guest</strong> before selecting a payment method. Once you click Confirm &amp; Finalize, the booking is marked as PAID and rooms are released — this cannot be undone.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ -->
+  <!-- STEP 4: Choose Payment Method  -->
+  <!-- ═══════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">4</div>
+    <div class="section-text">
+      <h2>Choose a Payment Method</h2>
+      <p>Select Cash or Card before finalizing — each follows a different flow.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot ocean">4</div>
+      <div>
+        <strong style="font-size:0.97em;">Cash vs. Card Payment</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">The two options trigger different confirmation flows.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview ocean-label" data-label="Payment Method Selector">
+      <div style="max-width:500px;margin:0 auto;">
+        <div style="font-size:0.8em;font-weight:700;color:var(--gray);text-align:center;margin-bottom:14px;text-transform:uppercase;letter-spacing:1px;">Select Payment Method</div>
+        <div class="method-selector" style="margin:0 0 14px;">
+          <div class="method-btn active" style="font-size:0.85em;">💵 Cash Payment<br><span style="font-size:0.75em;font-weight:400;color:var(--ocean);">Default selected</span></div>
+          <div class="method-btn" style="font-size:0.85em;">💳 Card Payment<br><span style="font-size:0.75em;font-weight:400;color:var(--gray);">Opens card form</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.78em;color:#555;">
+          <div style="background:#eafaf1;border:1px solid #a9dfbf;border-radius:8px;padding:12px;">
+            <div style="font-weight:700;color:var(--success);margin-bottom:4px;">💵 Cash Flow</div>
+            Click Confirm &amp; Finalize → booking marked PAID → receipt page opens.
+          </div>
+          <div style="background:#e8f4fd;border:1px solid #85c1e9;border-radius:8px;padding:12px;">
+            <div style="font-weight:700;color:var(--ocean);margin-bottom:4px;">💳 Card Flow</div>
+            Opens card payment form → enter card details → authorize → then finalize &amp; receipt.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header"><div class="step-num">1</div><div class="step-title">Cash is Selected by Default</div></div>
+        <div class="step-desc">When the bill page loads, <strong>💵 Cash Payment</strong> is already active (blue border). If the guest is paying cash, you don't need to change anything.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num ocean">2</div><div class="step-title">Switch to Card if Needed</div></div>
+        <div class="step-desc">Click the <strong>💳 Card Payment</strong> button to switch. The form action changes and clicking Confirm will open the card authorization screen instead.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num">3</div><div class="step-title">Only One Can Be Active</div></div>
+        <div class="step-desc">The active method is highlighted with a blue border. Clicking the other option automatically deactivates the previous one.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num danger">4</div><div class="step-title">Cannot Change After Confirming</div></div>
+        <div class="step-desc">Once you click <strong>Confirm &amp; Finalize</strong> the payment method is locked into the booking record. Make sure the correct method is selected first.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ -->
+  <!-- STEP 5: Cash Check-Out         -->
+  <!-- ═══════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">5</div>
+    <div class="section-text">
+      <h2>Completing a Cash Check-Out</h2>
+      <p>The simplest path — confirm and the system finalizes everything instantly.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot">5</div>
+      <div>
+        <strong style="font-size:0.97em;">Cash Payment Flow</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">💵 Cash selected → Confirm &amp; Finalize → receipt page.</p>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header"><div class="step-num">1</div><div class="step-title">Collect Cash from Guest</div></div>
+        <div class="step-desc">Collect the <strong>Total Payable</strong> amount shown in the bill card from the guest before clicking confirm.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num">2</div><div class="step-title">Ensure 💵 Cash is Active</div></div>
+        <div class="step-desc">Confirm the Cash Payment button has the blue border (active state). It is selected by default but verify it hasn't been accidentally changed.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num">3</div><div class="step-title">Click "Confirm &amp; Finalize"</div></div>
+        <div class="step-desc">Submit the form. The system marks the reservation as <strong>PAID</strong>, releases the room(s) to AVAILABLE status, and redirects to the receipt page.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num green">4</div><div class="step-title">Receipt Page Opens</div></div>
+        <div class="step-desc">The official receipt is generated automatically. Print it for the guest using the <strong>Print Receipt</strong> button (covered in Step 7).</div>
+      </div>
+    </div>
+
+    <div class="tip ok">
+      <div class="tip-icon">✅</div>
+      <div><strong>Rooms Released Automatically</strong> After confirming, the rooms are immediately marked as AVAILABLE in the system — no manual update needed. They will appear free in the 📋 Room Status screen right away.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ -->
+  <!-- STEP 6: Card Payment           -->
+  <!-- ═══════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">6</div>
+    <div class="section-text">
+      <h2>Completing a Card Payment</h2>
+      <p>Enter the guest's card details on the secure authorization screen.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot ocean">6</div>
+      <div>
+        <strong style="font-size:0.97em;">Card Payment Authorization Screen</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">💳 Card selected → enters a dedicated secure card form before finalizing.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview ocean-label" data-label="Card Authorization Screen">
+      <div class="mock-card-form">
+        <div class="card-form-title">Authorize Card</div>
+        <div class="card-amount">Amount: <strong>Rs. 43,850</strong></div>
+        <div class="card-input-group">
+          <div class="card-label">Cardholder Name</div>
+          <div class="card-input" style="color:var(--dark);">John Silva</div>
+        </div>
+        <div class="card-input-group">
+          <div class="card-label">Card Number</div>
+          <div class="card-input" style="color:var(--dark);">4111 1111 1111 1111</div>
+        </div>
+        <div class="card-row">
+          <div class="card-input-group">
+            <div class="card-label">Expiry</div>
+            <div class="card-input" style="color:var(--dark);">08/27</div>
+          </div>
+          <div class="card-input-group">
+            <div class="card-label">CVV</div>
+            <div class="card-input" style="color:var(--dark);">•••</div>
+          </div>
+        </div>
+        <button class="mock-btn ocean" style="width:100%;margin-top:14px;padding:13px;font-size:0.88em;">Pay Rs. 43,850</button>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header"><div class="step-num ocean">1</div><div class="step-title">Card Form Opens Automatically</div></div>
+        <div class="step-desc">Selecting 💳 Card and clicking Confirm opens a dedicated card authorization screen showing the exact amount to be charged.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num ocean">2</div><div class="step-title">Enter Card Details</div></div>
+        <div class="step-desc">Fill in the guest's <strong>Cardholder Name</strong>, <strong>Card Number</strong>, <strong>Expiry date</strong> (MM/YY), and <strong>CVV</strong> as shown on their card.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num">3</div><div class="step-title">Click "Pay Rs. [Amount]"</div></div>
+        <div class="step-desc">A 2-second authorization animation runs ("Processing Authorization..."). If approved, the success screen appears with a transaction ID.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num">4</div><div class="step-title">Click "Finish" to Finalize</div></div>
+        <div class="step-desc">After card approval, click the green <strong>Finish</strong> button. This submits to the server, marks the booking PAID, releases rooms, and opens the receipt.</div>
+      </div>
+    </div>
+
+    <!-- Card success state -->
+    <div class="screen-preview ocean-label" data-label="Card Payment — Authorization Success">
+      <div class="mock-card-success">
+        <div style="font-size:3em;color:var(--success);margin-bottom:10px;">✔</div>
+        <div style="font-weight:700;font-size:1em;color:var(--dark);margin-bottom:6px;">Payment Complete</div>
+        <div style="font-size:0.78em;color:#666;margin-bottom:18px;">Transaction ID: #TXN-17098234561</div>
+        <div style="display:flex;gap:10px;">
+          <button class="mock-btn dark" style="flex:1;padding:11px;font-size:0.78em;">Print Receipt</button>
+          <button class="mock-btn success" style="flex:1;padding:11px;font-size:0.78em;">Finish</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip danger">
+      <div class="tip-icon">⚠️</div>
+      <div><strong>Do NOT click "Finish" twice.</strong> Clicking Finish submits the booking as PAID to the server. If the page seems slow, wait — do not press again. Duplicate submissions could cause data errors. If in doubt, check <strong>📅 View Bookings</strong> to verify status before retrying.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ -->
+  <!-- STEP 7: Receipt                -->
+  <!-- ═══════════════════════════════ -->
+  <div class="section-label">
+    <div class="section-num">7</div>
+    <div class="section-text">
+      <h2>Print the Official Receipt</h2>
+      <p>An itemized receipt is generated automatically — print it for the guest before they leave.</p>
+    </div>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot">7</div>
+      <div>
+        <strong style="font-size:0.97em;">Official Receipt — Ocean View Resort</strong>
+        <p style="color:var(--gray);font-size:0.83em;margin-top:2px;">Shows accommodation charges, food orders, and total paid.</p>
+      </div>
+    </div>
+
+    <div class="screen-preview" data-label="Receipt Screen">
+      <div class="mock-receipt">
+        <div class="receipt-header">
+          <h3>OCEAN VIEW RESORT</h3>
+          <p>Galle Road, Galle<br>Tel: +94 11 234 5678</p>
+          <p><strong>OFFICIAL RECEIPT</strong></p>
+        </div>
+        <div class="receipt-row"><span>Date:</span><span>2025-08-13 14:32</span></div>
+        <div class="receipt-row"><span>Booking ID:</span><span>#1042</span></div>
+        <div class="receipt-row"><span>Guest:</span><span>John Silva</span></div>
+        <div class="receipt-row"><span>NIC:</span><span>199512345678</span></div>
+
+        <div class="receipt-section">Accommodation</div>
+        <div class="receipt-row"><span>Room(s): 101</span><span>5 Night(s)</span></div>
+        <div class="receipt-row" style="font-weight:700;"><span>Room Subtotal</span><span>Rs. 42,500.00</span></div>
+
+        <div class="receipt-section">Service &amp; Food Orders</div>
+        <div class="receipt-item-row"><span>Egg Omelette (x2)</span><span>900.00</span></div>
+        <div class="receipt-item-row"><span>Coffee (x1)</span><span>200.00</span></div>
+        <div class="receipt-item-row"><span>Orange Juice (x1)</span><span>250.00</span></div>
+        <div class="receipt-row" style="font-weight:700;margin-top:4px;"><span>Service Subtotal</span><span>Rs. 1,350.00</span></div>
+
+        <div class="receipt-total"><span>TOTAL PAID</span><span>Rs. 43,850</span></div>
+        <div class="receipt-footer">
+          <p>Thank you for staying with us!<br>Please come again.</p>
+          <p><em>Computer Generated Receipt</em></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header"><div class="step-num">1</div><div class="step-title">Receipt Loads Automatically</div></div>
+        <div class="step-desc">After confirming payment (cash or card), the system generates the receipt page immediately with all itemized charges pulled from the database.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num">2</div><div class="step-title">Click "Print Receipt"</div></div>
+        <div class="step-desc">Click the <strong>Print Receipt</strong> button at the bottom of the page. The browser's print dialog opens — select the connected printer and print.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num green">3</div><div class="step-title">Hand Receipt to Guest</div></div>
+        <div class="step-desc">Give the printed receipt to the guest. The receipt shows: booking ID, guest name &amp; NIC, room(s), nights, all food orders, and the total amount paid.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num dark">4</div><div class="step-title">Click "Close" to Return</div></div>
+        <div class="step-desc">After printing, click the <strong>Close</strong> button to return to the dashboard. The check-out is now fully complete.</div>
+      </div>
+    </div>
+
+    <div class="tip ok">
+      <div class="tip-icon">✅</div>
+      <div><strong>Check-Out Complete!</strong> The reservation is now marked <strong>PAID</strong>, the room(s) are released as AVAILABLE, and the guest has their receipt. The full transaction is visible in <strong>📅 View Bookings</strong> for record-keeping.</div>
+    </div>
+  </div>
+
+  <!-- ═══ QUICK REFERENCE ═══ -->
+  <div class="section-divider">
+    <hr><span>Quick Reference</span><hr>
+  </div>
+
+  <div class="tutorial-section">
+    <div class="tutorial-header">
+      <div class="step-dot dark">?</div>
+      <div><strong style="font-size:0.97em;">Common Scenarios &amp; What To Do</strong></div>
+    </div>
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-header"><div class="step-num dark">?</div><div class="step-title">Guest NIC search shows no result</div></div>
+        <div class="step-desc">Verify the NIC is correct. Also check <strong>📅 View Bookings</strong> — the reservation might already be PAID (already checked out) or CANCELLED.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num dark">?</div><div class="step-title">Food total is wrong or missing</div></div>
+        <div class="step-desc">Food charges are pulled automatically from orders placed via <strong>🍽️ Food Ordering</strong>. If items are missing, add them there before processing check-out.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num dark">?</div><div class="step-title">Guest checking out early</div></div>
+        <div class="step-desc">The system detects early check-out automatically and shows the <strong>EARLY</strong> badge. The bill is recalculated for actual nights — no manual adjustment needed.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-header"><div class="step-num dark">?</div><div class="step-title">Receipt page won't load</div></div>
+        <div class="step-desc">If the receipt page fails, go to <strong>📅 View Bookings</strong>, find the booking (should show PAID), and use your browser's back button carefully — do not re-submit.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:28px 0 16px;color:var(--gray);font-size:0.82em;">
+    Ocean View Resort — Check-Out Tutorial &nbsp;·&nbsp; Visit the 💡 <strong>Help Center</strong> for more guides.
+  </div>
+
+</div><!-- /main -->
+</body>
+</html>
